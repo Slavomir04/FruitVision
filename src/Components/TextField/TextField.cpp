@@ -5,8 +5,7 @@
 #include "TextField.h"
 TextField::TextField(float fl_size_x, float fl_size_y) {
         c_shape.setSize(sf::Vector2f(fl_size_x,fl_size_y));
-        c_shape.setPosition(0,0);
-        vText_center();
+        FirstInit();
 }
 
 TextField::~TextField() = default;
@@ -17,8 +16,7 @@ bool TextField::isMouseOver(float fl_mouse_x,float fl_mouse_y) {
 
 bool TextField::isClicked(sf::Event &event) {
     return isMouseOver(event.mouseButton.x,event.mouseButton.y)&&
-    event.type == sf::Event::MouseButtonPressed &&
-    event.mouseButton.button == sf::Mouse::Left;
+    (event.type == sf::Event::MouseButtonPressed || event.type == sf::Event::MouseButtonReleased);
 }
 
 void TextField::draw(sf::RenderTarget &target, sf::RenderStates states) const {
@@ -51,6 +49,20 @@ void TextField::update(const sf::RenderWindow &c_Window) {
 
 void TextField::updateEvent(sf::Event &c_Event) {
     Updateable::updateEvent(c_Event);
+}
+
+void TextField::setText(const std::string &text) {
+    this->c_text.setString(text);
+}
+
+void TextField::FirstInit() {
+    c_shape.setPosition(0,0);
+    c_shape.setFillColor(sf::Color::White);
+    c_shape.setOutlineColor(sf::Color::Black);
+
+    c_text.setFillColor(sf::Color::Black);
+
+    vText_center();
 }
 
 void TextField::vText_center() {

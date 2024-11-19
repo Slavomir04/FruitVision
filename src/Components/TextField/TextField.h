@@ -11,6 +11,7 @@ public:
     TextField(float fl_size_x,float fl_size_y);
     ~TextField() override;
 
+
     bool isMouseOver(float fl_mouse_x,float fl_mouse_y) override;
     bool isClicked(sf::Event &event) override;
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
@@ -20,8 +21,11 @@ public:
     sf::Vector2f pGetPosition() override;
     void update(const sf::RenderWindow &c_Window) override;
     void updateEvent(sf::Event &c_Event) override;
+    void setText(const std::string &text);
+    std::string getText();
 
 private:
+    void FirstInit();
     void vText_center();
     sf::RectangleShape c_shape;
     sf::Text c_text;

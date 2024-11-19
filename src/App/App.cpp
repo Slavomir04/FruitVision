@@ -3,6 +3,9 @@
 //
 
 #include "App.h"
+
+#include "../Components/TextField/TextField.h"
+
 App::App(int i_window_size_x, int i_window_size_y, std::string str_name) {
     this->window = new sf::RenderWindow(sf::VideoMode(i_window_size_x, i_window_size_y), str_name);
 
@@ -12,6 +15,11 @@ App::~App() {
 }
 
 void App::vStart() {
+
+    TextField text_field_test(350,100);
+    text_field_test.setText("Hello World");
+
+
     while (window->isOpen())
     {
         sf::Event event;
@@ -20,8 +28,8 @@ void App::vStart() {
             if (event.type == sf::Event::Closed)
                 window->close();
         }
-
         window->clear();
+        window->draw(text_field_test);
         window->display();
     }
 }
