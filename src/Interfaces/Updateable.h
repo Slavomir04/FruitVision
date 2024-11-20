@@ -8,8 +8,8 @@
 
 class Updateable {
 public:
-    virtual void update(const sf::RenderWindow &c_Window){}
-    virtual void updateEvent(sf::Event &c_Event){}
+    virtual void vUpdate(const sf::RenderWindow &c_Window){}
+    virtual void vUpdateEvent(sf::Event &c_Event){}
 };
 
 

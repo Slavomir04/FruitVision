@@ -2,76 +2,159 @@
 // Created by Sławomir on 05.11.2024.
 //
 
+
 #include "TextField.h"
-TextField::TextField(float fl_size_x, float fl_size_y) {
-        c_shape.setSize(sf::Vector2f(fl_size_x,fl_size_y));
-        FirstInit();
+TextField::TextField(float fl_size_x, float fl_size_y) : SButton(fl_size_x,fl_size_y,""),
+                                                         i_maximum_length(MAXIMUM_LENGTH), i_maxiumum_unicode(MAXIMUM_UNICODE) {}
+TextField::TextField(float fl_size_x, float fl_size_y, std::string str_font_path) : SButton(fl_size_x,fl_size_y,""),
+                                                                                    i_maximum_length(MAXIMUM_LENGTH), i_maxiumum_unicode(MAXIMUM_UNICODE) {}
+
+TextField::TextField(float fl_size_x, float fl_size_y, std::string str_font_path,int i_maximum_length,int i_maximum_unicode):SButton(fl_size_x,fl_size_y,""),
+i_maximum_length(i_maximum_length), i_maxiumum_unicode(i_maximum_unicode){}
+
+TextField::TextField(float fl_size_x, float fl_size_y, std::string str_text,int i_default_character_size,
+          float fl_default_thicknes,std::string str_font_path,int i_maximum_length,int i_maximum_unicode) : SButton(fl_size_x,fl_size_y,"",i_default_character_size,fl_default_thicknes,str_font_path),
+i_maximum_length(i_maximum_length), i_maxiumum_unicode(i_maxiumum_unicode){}
+
+
+
+
+
+void TextField::vSetSize(float fl_x, float fl_y) {
+    c_shape.setSize(sf::Vector2f(fl_x,fl_y));
+}
+void TextField::vSetText(const std::string &text) {
+    SButton::vSetText(text);
+    vTrimTextSize();
+}
+void TextField::vSetAlign(TextField::TextAlign_type alignType) {
+    this->e_text_align =alignType;
 }
 
-TextField::~TextField() = default;
 
-bool TextField::isMouseOver(float fl_mouse_x,float fl_mouse_y) {
-    return c_shape.getGlobalBounds().contains(fl_mouse_x, fl_mouse_y);
+
+void TextField::vUpdate(const sf::RenderWindow &c_Window) {
+    vShape_update();
+    vText_update();
 }
 
-bool TextField::isClicked(sf::Event &event) {
-    return isMouseOver(event.mouseButton.x,event.mouseButton.y)&&
-    (event.type == sf::Event::MouseButtonPressed || event.type == sf::Event::MouseButtonReleased);
+void TextField::vUpdateEvent(sf::Event &c_Event) {
+    //mouse
+    if(bIsClicked(c_Event)){
+        b_is_focused= true;
+    }else if(c_Event.type == sf::Event::MouseButtonPressed){
+        b_is_focused= false;
+    }
+
+
+    //keyboard
+    if(b_is_focused && c_Event.type == sf::Event::KeyPressed){
+        if(c_Event.text.unicode <= i_maxiumum_unicode){
+           // printf("%i",(int)c_Event.text.unicode);
+            std::string str_new_text = c_text.getString();
+            char c_asciiChar = cGetCharFromEvent(c_Event);
+            if(c_Event.key.code == sf::Keyboard::BackSpace){
+                if(!str_new_text.empty())
+                    str_new_text.pop_back();
+            }else if(str_new_text.size()<i_maximum_length){
+                str_new_text.push_back(c_asciiChar);
+            }
+            vSetText(str_new_text);
+
+        }
+    }
 }
 
-void TextField::draw(sf::RenderTarget &target, sf::RenderStates states) const {
-    target.draw(c_shape,states);
-    target.draw(c_text,states);
-}
 
-void TextField::setPosition(float fl_x, float fl_y) {
-    float fl_shift_x = c_shape.getPosition().x-c_text.getPosition().x;
-    float fl_shift_y = c_shape.getPosition().y-c_text.getPosition().y;
-    c_shape.setPosition(sf::Vector2f(fl_x,fl_y));
-    c_text.setPosition(sf::Vector2f(fl_x+fl_shift_x,fl_y+fl_shift_y));
-}
 
-void TextField::setSize(float fl_x, float fl_y) {
-    Component::setSize(fl_x, fl_y);
-}
 
-sf::Vector2f TextField::pGetSize() {
-    return Component::pGetSize();
-}
 
-sf::Vector2f TextField::pGetPosition() {
-    return Component::pGetPosition();
-}
+void TextField::vText_update() {
+    switch (e_text_align) {
+        case Left:
+            vText_left();
+            break;
+        case Right:
+            vText_right();
+            break;
+        case Center:
+            vText_center();
+            break;
+        default:
+            vText_left();
+    }
 
-void TextField::update(const sf::RenderWindow &c_Window) {
-    Updateable::update(c_Window);
-}
 
-void TextField::updateEvent(sf::Event &c_Event) {
-    Updateable::updateEvent(c_Event);
-}
-
-void TextField::setText(const std::string &text) {
-    this->c_text.setString(text);
-}
-
-void TextField::FirstInit() {
-    c_shape.setPosition(0,0);
-    c_shape.setFillColor(sf::Color::White);
-    c_shape.setOutlineColor(sf::Color::Black);
-
-    c_text.setFillColor(sf::Color::Black);
-
-    vText_center();
 }
 
 void TextField::vText_center() {
-    sf::FloatRect rectBounds = c_shape.getGlobalBounds();
-    sf::FloatRect textBounds = c_text.getLocalBounds();
-    float x = rectBounds.left + (rectBounds.width / 2.0f) - (textBounds.width / 2.0f) - textBounds.left;
-    float y = rectBounds.top + (rectBounds.height / 2.0f) - (textBounds.height / 2.0f) - textBounds.top;
-    c_text.setPosition(x, y);
+    c_text.setPosition(c_shape.getPosition());
+    float fl_x_move = (c_shape.getSize().x - c_text.getGlobalBounds().getSize().x)/2.0f;
+    float fl_y_move = (c_shape.getSize().y - c_text.getGlobalBounds().getSize().y)/2.0f;
+    c_text.move(-fl_x_move,-fl_y_move);
 }
+void TextField::vText_left() {
+    c_text.setPosition(c_shape.getPosition());
+    float fl_x_move = c_text.getLetterSpacing();
+    float fl_y_move = (c_shape.getSize().y - c_text.getGlobalBounds().getSize().y)/2.0f;
+    c_text.move(fl_x_move,fl_y_move);
+}
+
+void TextField::vText_right() {
+    c_text.setPosition(c_shape.getPosition());
+    float fl_x_move = c_text.getLetterSpacing();
+    float fl_y_move = c_shape.getSize().y - c_text.getGlobalBounds().getSize().y;
+    c_text.move(-fl_x_move,-fl_y_move);
+}
+
+
+void TextField::vTrimTextSize() {
+
+}
+
+
+
+char TextField::cGetCharFromEvent(sf::Event &c_Event) {
+    if(c_Event.text.unicode < 'z'-'a'){
+        return (char)('a'+c_Event.text.unicode);
+    }else if(c_Event.text.unicode == 58){
+        return '\n';
+    }else return '?';
+}
+
+void TextField::vFirstInit() {
+    SButton::vFirstInit();
+    e_text_align = Left;
+    vShape_update();
+    vText_update();
+}
+
+void TextField::vSetPosition_text() {
+    float fl_shift_x = c_shape.getPosition().x-c_text.getPosition().x;
+    float fl_shift_y = c_shape.getPosition().y-c_text.getPosition().y;
+    c_text.setPosition(sf::Vector2f(c_shape.getPosition().x+fl_shift_x,c_shape.getPosition().x+fl_shift_y));
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

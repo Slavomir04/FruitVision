@@ -6,11 +6,11 @@
 #define FRUITVISION_IMAGERECOGNIZER_H
 
 #include <string>
+#include <vector>
 
 class ImageRecognizer {
 public:
-    virtual std::pair<std::string,double>* pcGetResult();
-    virtual int iGetSize();
+    virtual std::vector<std::pair<std::string,double>> vecGetResult();
     virtual bool vLoadModel(std::string str_adres);
     virtual bool vLoadImage(std::string str_adres);
 

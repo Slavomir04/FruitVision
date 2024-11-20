@@ -15,12 +15,21 @@ add_executable(FruitVision main.cpp
         src/Interfaces/Updateable.h
         src/Components/Button.h
         src/Components/TextField/TextField.cpp
-        src/Components/TextField/TextField.h)
+        src/Components/TextField/TextField.h
+        src/Components/SButton/SButton.cpp
+        src/Components/SButton/SButton.h
+        src/Interfaces/Commands.h
+        src/Components/SButton/TesterObservator.h
+        src/Layers/MenuLayer.cpp
+        src/Layers/MenuLayer.h
+        src/Layers/LoadImage.cpp
+        src/Layers/LoadImage.h)
 set(SFML_STATIC_LIBRARIES TRUE)
 
 
 
-set(WHERE_SFML C:/programowanie/libraries/SFML-2.6.1)
+
+set(WHERE_SFML D:/Programownie/SFML-2.6.1-windows-gcc-13.1.0-mingw-64-bit/SFML-2.6.1)
 
 set(SFML_DIR ${WHERE_SFML}/lib/cmake/SFML)
 find_package(SFML COMPONENTS system window graphics audio network REQUIRED)
@@ -51,6 +60,14 @@ add_executable(test
         src/Components/Button.h
         src/Components/TextField/TextField.cpp
         src/Components/TextField/TextField.h
+        src/Components/SButton/SButton.cpp
+        src/Components/SButton/SButton.h
+        src/Interfaces/Commands.h
+        src/Components/SButton/TesterObservator.h
+        src/Layers/MenuLayer.cpp
+        src/Layers/MenuLayer.h
+        src/Layers/LoadImage.cpp
+        src/Layers/LoadImage.h
 )
 
 

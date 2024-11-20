@@ -8,8 +8,8 @@
 
 class Button :public Component{
 public:
-    virtual bool isMouseOver(float fl_mouse_x,float fl_mouse_y){return false;}
-    virtual bool isClicked(sf::Event &event){return false;}
+    virtual bool bIsMouseOver(float fl_mouse_x, float fl_mouse_y){return false;}
+    virtual bool bIsClicked(sf::Event &event){return false;}
 };
 
 

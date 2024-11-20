@@ -9,6 +9,7 @@
 
 #include <vector>
 #include "Observator.h"
+
 class Observable {
 public:
 

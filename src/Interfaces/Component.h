@@ -11,10 +11,10 @@ class Component : public sf::Drawable, public Observable,public Updateable{
 
 public:
     virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const override {}
-    virtual void setPosition(float fl_x,float fl_y){}
-    virtual void setSize(float fl_x,float fl_y){}
-    virtual sf::Vector2f pGetSize(){return sf::Vector2f(0,0);}
-    virtual sf::Vector2f pGetPosition(){return sf::Vector2f(0,0);}
+    virtual void vSetPosition(float fl_x, float fl_y){}
+    virtual void vSetSize(float fl_x, float fl_y){}
+    virtual sf::Vector2f vfGetSize(){return sf::Vector2f(0, 0);}
+    virtual sf::Vector2f vfGetPosition(){return sf::Vector2f(0, 0);}
 
 private:
 

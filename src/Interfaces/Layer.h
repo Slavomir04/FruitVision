@@ -13,8 +13,10 @@
 class Layer :public Observator,public Observable,public sf::Drawable,public Updateable{
 public:
     virtual ~Layer(){
-        for(auto pc_e : vec_components){
-            delete pc_e;
+        if(!vec_components.empty()) {
+            for (auto pc_e: vec_components) {
+                delete pc_e;
+            }
         }
     }
     void addComponent(Component* pc_component){
@@ -27,19 +29,21 @@ public:
         }
     }
 
-    void update(const sf::RenderWindow &c_Window) override {
-        for(auto pc_e : vec_components){
-            (*pc_e).update(c_Window);
+    void vUpdate(const sf::RenderWindow &c_Window) override {
+        if(!vec_components.empty()) {
+            for (auto pc_e: vec_components) {
+                (*pc_e).vUpdate(c_Window);
+            }
         }
     }
 
-    void updateEvent(sf::Event &c_Event) override {
+    void vUpdateEvent(sf::Event &c_Event) override {
         for(auto pc_e : vec_components){
-            (*pc_e).updateEvent(c_Event);
+            (*pc_e).vUpdateEvent(c_Event);
         }
     }
 
-private:
+protected:
     std::vector<Component*> vec_components;
 };
 
