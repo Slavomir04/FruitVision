@@ -7,7 +7,8 @@
 #include "../Button.h"
 #define DEFAULT_OUTLINE_THICKNES 4
 #define DEFAULT_CHARACTER_SIZE 30
-#define DEFAULT_FONT_PATH "D://Programownie//Clion projekty//FruitVision//src//Components//TextField//font.otf"
+
+#define DEFAULT_FONT_PATH "../src/Resources/font.otf"
 #define FONT_CANNOT_LOAD_TEXT "nie mozna zaladowac czcionki! "
 #define DEFAULT_COMMAND "clicked"
 class SButton : public Button{
@@ -22,7 +23,7 @@ public:
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
     void vSetPosition(float fl_x, float fl_y) override;
     void vSetSize(float fl_x, float fl_y) override;
-    void vSetText(const std::string &text);
+    virtual void vSetText(const std::string &text);
     void vSetOutlineThicknes(float fl_thicknes);
     void vSetOnClickCommand(const std::string &str_command);
     void vSetCharacterSize(int i_character_size);
@@ -31,26 +32,36 @@ public:
     std::string getText();
     void vUpdate(const sf::RenderWindow &c_Window) override;
     void vUpdateEvent(sf::Event &c_Event) override;
+    void vSetFont(const sf::Font& newFont);
+    void vSetFocusable(bool b_focusable);
+    void vSetColorPressed(const sf::Color &color);
+    void vSetColorFocused(const sf::Color &color);
+    void vSetColorNoFocused(const sf::Color &color);
+    void vSetColorOutline(const sf::Color &color);
+    void vSetColorCharacter(const sf::Color &color);
 
 
-
-
-    const sf::Color color_default_pressed = sf::Color::Green;
-    const sf::Color color_default_focused = sf::Color(128,64,255);
-    const sf::Color color_default_nofocused = sf::Color::White;
-    const sf::Color color_outline = sf::Color::Cyan;
-    const sf::Color color_character = sf::Color::Black;
+     sf::Color color_default_pressed = sf::Color::Green;
+     sf::Color color_default_focused = sf::Color(128,64,255);
+     sf::Color color_default_nofocused = sf::Color::White;
+     sf::Color color_outline = sf::Color::Cyan;
+     sf::Color color_character = sf::Color::Black;
 
 protected:
+
     virtual void vFirstInit();
     void vShape_update();
-    void vText_update();
-    virtual void vSetPosition_text();
+    virtual void vMoveText(float fl_div_x, float fl_div_y);
+    void vSetPositionText(float fl_x, float fl_y);
+    void vText_center();
+    bool bLoadFont(std::string str_path);
+    void vTrimTextSize();
 
     sf::RectangleShape c_shape;
     sf::Text c_text;
     sf::Font c_font;
     bool b_is_focused;
+    bool b_focusable;
     const std::string str_font_path;
     const int i_default_character_size;
     float fl_outline_thicknes;

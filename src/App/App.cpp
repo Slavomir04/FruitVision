@@ -45,15 +45,16 @@ void App::vFirstInit() {
 
     this->i_current_target=0;
 
-    this->vec_layer_contener.push_back((Layer*)new MenuLayer(*this));
+    this->vec_layer_contener.push_back((Layer*)new MenuLayer(*this,window->getSize().x*0.2,window->getSize().x*0.1));
     ((MenuLayer*)vec_layer_contener[0])->vAddSButton("Get Result","result test");
     ((MenuLayer*)vec_layer_contener[0])->vAddSButton("Load image","load image test");
     ((MenuLayer*)vec_layer_contener[0])->vAddSButton("Load model",str_load);
 
-    this->vec_layer_contener.push_back((Layer*)new LoadImage(str_return_to_menu));
+    this->vec_layer_contener.push_back((Layer*)new LoadModel(str_return_to_menu));
     vec_layer_contener[vec_layer_contener.size()-1]->addObservator(this);
 
 }
+
 
 bool App::executeCommand(std::string &str_command) {
     if(str_command == str_return_to_menu)i_current_target=0;
@@ -61,6 +62,8 @@ bool App::executeCommand(std::string &str_command) {
     printf("App executeCommand %s\n",str_command.c_str());
     return true;
 }
+
+
 
 
 

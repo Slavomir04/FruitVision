@@ -19,11 +19,10 @@ add_executable(FruitVision main.cpp
         src/Components/SButton/SButton.cpp
         src/Components/SButton/SButton.h
         src/Interfaces/Commands.h
-        src/Components/SButton/TesterObservator.h
         src/Layers/MenuLayer.cpp
         src/Layers/MenuLayer.h
-        src/Layers/LoadImage.cpp
-        src/Layers/LoadImage.h)
+        src/Layers/LoadModel.cpp
+        src/Layers/LoadModel.h)
 set(SFML_STATIC_LIBRARIES TRUE)
 
 
@@ -63,11 +62,10 @@ add_executable(test
         src/Components/SButton/SButton.cpp
         src/Components/SButton/SButton.h
         src/Interfaces/Commands.h
-        src/Components/SButton/TesterObservator.h
         src/Layers/MenuLayer.cpp
         src/Layers/MenuLayer.h
-        src/Layers/LoadImage.cpp
-        src/Layers/LoadImage.h
+        src/Layers/LoadModel.cpp
+        src/Layers/LoadModel.h
 )
 
 

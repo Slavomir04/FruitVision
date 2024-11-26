@@ -6,17 +6,16 @@
 #define FRUITVISION_TEXTFIELD_H
 
 #define MAXIMUM_UNICODE  127
-#define MAXIMUM_LENGTH 30
+#define MAXIMUM_LENGTH 260
 #include "../SButton/SButton.h"
 
 
 class TextField : public SButton{
 public:
     TextField(float fl_size_x,float fl_size_y); //override
-    TextField(float fl_size_x,float fl_size_y,std::string str_font_path);//override
-    TextField(float fl_size_x, float fl_size_y, std::string str_font_path,int i_maximum_length,int i_maximum_unicode);
-    TextField(float fl_size_x, float fl_size_y, std::string str_text,int i_default_character_size,
-              float fl_default_thicknes,std::string str_font_path,int i_maximum_length,int i_maximum_unicode);
+    TextField(float fl_size_x, float fl_size_y,int i_maximum_length,int i_maximum_unicode);
+    TextField(float fl_size_x, float fl_size_y,int i_maximum_length,int i_maximum_unicode,std::string &str_font_path);
+
 
 
 
@@ -30,7 +29,7 @@ public:
 
 
     void vSetSize(float fl_x, float fl_y) override; //override
-    void vSetText(const std::string &text);
+    void vSetText(const std::string &text) override;
     void vSetAlign(TextAlign_type alignType);
 
 
@@ -47,11 +46,10 @@ public:
 
 private:
 
-    void vText_update();
-    void vText_center();
+    void vAlignText();
     void vText_left();
     void vText_right();
-    void vTrimTextSize();
+
 
 
     char cGetCharFromEvent(sf::Event &c_Event);
@@ -59,7 +57,7 @@ private:
 protected:
     void vFirstInit() override;
 
-    void vSetPosition_text() override;
+
 
 private:
 

@@ -9,7 +9,7 @@
 #include <vector>
 #include "../Interfaces/Layer.h"
 #include "../Layers/MenuLayer.h"
-#include "../Layers/LoadImage.h"
+#include "../Layers/LoadModel.h"
 class App : Observator{
 public:
     App(int i_window_size_x,int i_window_size_y,std::string str_name);
@@ -17,7 +17,6 @@ public:
     void vStart();
 private:
     void vFirstInit();
-
     bool executeCommand(std::string &str_command) override;
 
     sf::RenderWindow* window;

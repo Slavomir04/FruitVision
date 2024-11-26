@@ -7,7 +7,6 @@
 #include "../src/Components/TextField/TextField.h"
 #include "../src/Interfaces/Observator.h"
 #include "../src/Components/SButton/SButton.h"
-#define TEST_FONT_PATH "D://Programownie//Clion projekty//FruitVision//src//Components//TextField//font.otf"
 TEST(firsttest,testing) {
     EXPECT_EQ(1+2,3);
 }
@@ -32,7 +31,7 @@ TEST(Components,SButton){
     ObservatorTester observator_tester;
     std::string str_command = "123456789";
 
-    SButton sButton(100, 100, "", 5, 0.0f, TEST_FONT_PATH);
+    SButton sButton(100, 100, "", 5, 0.0f);
     sButton.vSetPosition(100,100);
     sButton.vSetOnClickCommand(str_command);
     sButton.addObservator(&observator_tester);
@@ -66,7 +65,7 @@ TEST(Components,SButton){
 
 
 TEST(Components,TextField) {
-    TextField text_field(100, 300, TEST_FONT_PATH, 30, 128);
+    TextField text_field(100, 300);
     text_field.vSetText("Hello World");
     text_field.vSetPosition(50, 50);
     text_field.vSetOutlineThicknes(0);
