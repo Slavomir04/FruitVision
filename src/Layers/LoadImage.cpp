@@ -1,14 +1,13 @@
 //
-// Created by Sławomir on 19.11.2024.
+// Created by Sławomir on 27.11.2024.
 //
 
-#include "LoadModel.h"
-
-LoadModel::LoadModel(std::string str_return_command) : str_return_command(str_return_command),i_maximum_information_length(50){
+#include "LoadImage.h"
+LoadImage::LoadImage(std::string str_return_command)  : str_return_command(str_return_command),i_maximum_information_length(50){
     vFirstInit();
 }
 
-void LoadModel::vUpdate(const sf::RenderWindow &c_Window) {
+void LoadImage::vUpdate(const sf::RenderWindow &c_Window) {
     Layer::vUpdate(c_Window);
     vSetPositions(c_Window.getSize().x,c_Window.getSize().y);
     if((clock.getElapsedTime() - time_lasttime).asMilliseconds() > WAIT_TIME){
@@ -17,11 +16,11 @@ void LoadModel::vUpdate(const sf::RenderWindow &c_Window) {
     }
 }
 
-void LoadModel::vUpdateEvent(sf::Event &c_Event) {
+void LoadImage::vUpdateEvent(sf::Event &c_Event) {
     Layer::vUpdateEvent(c_Event);
 }
 
-void LoadModel::vFirstInit() {
+void LoadImage::vFirstInit() {
     time_lasttime = clock.restart();
     b_is_loaded= false;
 
@@ -40,10 +39,16 @@ void LoadModel::vFirstInit() {
 
 
     for(auto& e : vec_components)e->addObservator(this);
+
+
+    rec_image.setSize(vf_Image_load_size);
+    rec_image.setFillColor(color_image_background);
 }
 
-void LoadModel::vSetPositions(float fl_window_size_x, float fl_window_size_y) {
+void LoadImage::vSetPositions(float fl_window_size_x, float fl_window_size_y) {
     sf::Vector2f position = {fl_window_size_x/2.0f,fl_window_size_y*0.1f};
+    rec_image.setPosition(position.x - rec_image.getSize().x/2.0f,position.y);
+    position+={0,rec_image.getSize().y*1.1f};
     vec_components[i_index_of_informationField]->vSetPosition(position.x-vec_components[i_index_of_textField]->vfGetSize().x/2,position.y);
     position+={0,vec_components[i_index_of_informationField]->vfGetSize().y*1.1f};
     vec_components[i_index_of_textField]->vSetPosition(position.x-vec_components[i_index_of_textField]->vfGetSize().x/2,position.y);
@@ -51,18 +56,27 @@ void LoadModel::vSetPositions(float fl_window_size_x, float fl_window_size_y) {
     vec_components[i_index_of_button_back]->vSetPosition(position.x-vec_components[i_index_of_button_back]->vfGetSize().x,position.y);
     vec_components[i_index_of_button_load]->vSetPosition(position.x,position.y);
 }
-void LoadModel::vLoadModel() {
+void LoadImage::vLoadTexture() {
 
     std::string str_curr_path = ((TextField*)vec_components[i_index_of_textField])->getText();
     if(std::filesystem::exists(str_curr_path)){
-        ((TextField*)vec_components[i_index_of_informationField])->vSetText(str_feedback_ok);
-        str_path = str_curr_path;
-        b_is_loaded = true;
+        try{
+            texture_image.loadFromFile(str_curr_path);
+            ((TextField *) vec_components[i_index_of_informationField])->vSetText(str_feedback_ok);
+            str_path = str_curr_path;
+            b_is_loaded = true;
+            rec_image.setTexture(&texture_image);
+        }catch(...){
+            ((TextField *) vec_components[i_index_of_informationField])->vSetText(str_feedback_cannnot_open_file);
+        }
     }else{
         ((TextField*)vec_components[i_index_of_informationField])->vSetText(str_feedback_fail);
     }
+    if(!b_is_loaded)rec_image.setFillColor(color_image_background);
+    else rec_image.setFillColor(sf::Color::White);
 }
-void LoadModel::vReset() {
+
+void LoadImage::vReset() {
     if(b_is_loaded){
         std::string str_loaded_text = str_path;
         std::string str_result;
@@ -79,23 +93,18 @@ void LoadModel::vReset() {
 }
 
 
-bool LoadModel::executeCommand(std::string &str_command) {
+bool LoadImage::executeCommand(std::string &str_command) {
     if(str_command == str_return_command){
         provideCommand(str_return_command);
         ((TextField*)vec_components[i_index_of_textField])->vSetText("");
     }
-    else if(str_command == LOAD_COMMAND)vLoadModel();
+    else if(str_command == LOAD_COMMAND)vLoadTexture();
     return true;
 }
 
-
-
-
-
-
-
-
-
-
+void LoadImage::draw(sf::RenderTarget &target, sf::RenderStates states) const {
+    Layer::draw(target, states);
+    target.draw(rec_image,states);
+}
 
 

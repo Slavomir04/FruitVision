@@ -10,5 +10,28 @@ int main()
 
    App app(700,700,"App");
    app.vStart();
+
+    /*
+    sf::RectangleShape rec;
+    sf::Texture texture;
+
+    rec.setSize(sf::Vector2f(100,100));
+    texture.loadFromFile("D:/Programownie/Clion projekty/FruitVision/src/Resources/1.png");
+    sf::RenderWindow*  window = new sf::RenderWindow(sf::VideoMode(700, 700), "123",sf::Style::Titlebar | sf::Style::Close);
+    while (window->isOpen())
+    {
+        sf::Event event;
+        while (window->pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+                window->close();
+
+        }
+        window->clear();
+
+        window->display();
+    }
+    delete window;
+     */
     return 0;
 }

@@ -22,7 +22,14 @@ add_executable(FruitVision main.cpp
         src/Layers/MenuLayer.cpp
         src/Layers/MenuLayer.h
         src/Layers/LoadModel.cpp
-        src/Layers/LoadModel.h)
+        src/Layers/LoadModel.h
+        src/Layers/LoadImage.cpp
+        src/Layers/LoadImage.h
+        src/Layers/GetResult.cpp
+        src/Layers/GetResult.h
+        src/Components/SImage/SImage.cpp
+        src/Components/SImage/SImage.h
+)
 set(SFML_STATIC_LIBRARIES TRUE)
 
 
@@ -66,6 +73,8 @@ add_executable(test
         src/Layers/MenuLayer.h
         src/Layers/LoadModel.cpp
         src/Layers/LoadModel.h
+        src/Components/SImage/SImage.cpp
+        src/Components/SImage/SImage.h
 )
 
 

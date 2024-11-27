@@ -10,6 +10,7 @@
 #include "../Interfaces/Layer.h"
 #include "../Layers/MenuLayer.h"
 #include "../Layers/LoadModel.h"
+#include "../Layers/LoadImage.h"
 class App : Observator{
 public:
     App(int i_window_size_x,int i_window_size_y,std::string str_name);
@@ -24,8 +25,15 @@ private:
     std::vector<Layer*> vec_layer_contener;
     int i_current_target;
 
+    const int i_index_menu=0;
+    const int i_index_getresult=1;
+    const int i_index_loadimage=2;
+    const int i_index_loadmodel=3;
+
     const std::string str_return_to_menu = "menu";
-    const std::string str_load = "load";
+    const std::string str_get_result = "get result";
+    const std::string str_load_model = "load model";
+    const std::string str_load_image = "load image";
 
 };
 
