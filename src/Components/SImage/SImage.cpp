@@ -12,9 +12,18 @@ SImage::~SImage() {
     delete pc_Texture;
 }
 bool SImage::bLoadImage(const std::string &str_path) {
+    /*
     bool b_result = this->pc_Texture->loadFromFile(str_path);
     if(b_result)pc_Shape->setTexture(pc_Texture);
     return b_result;
+    */
+    try{
+        this->pc_Texture->loadFromFile(str_path);
+        pc_Shape->setTexture(pc_Texture);
+        return true;
+    }catch(...){
+        return false;
+    }
 }
 void SImage::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     target.draw(*pc_Shape);
@@ -43,7 +52,7 @@ void SImage::vFirstInit() {
     pc_Texture = new sf::Texture();
     pc_Shape->setFillColor(sf::Color::White);
 }
-void SImage::vSetBackgroundColor(sf::Color &color) {
+void SImage::vSetBackgroundColor(sf::Color color) {
     this->pc_Shape->setFillColor(color);
 }
 

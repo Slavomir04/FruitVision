@@ -11,6 +11,7 @@
 #include "../Layers/MenuLayer.h"
 #include "../Layers/LoadModel.h"
 #include "../Layers/LoadImage.h"
+#include "../Layers/GetResult.h"
 class App : Observator{
 public:
     App(int i_window_size_x,int i_window_size_y,std::string str_name);

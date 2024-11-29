@@ -27,7 +27,7 @@ public:
 
     void vUpdateEvent(sf::Event &c_Event) override;
 
-    void vSetBackgroundColor(sf::Color &color);
+    void vSetBackgroundColor(sf::Color color);
 private:
     void vFirstInit();
     sf::RectangleShape* pc_Shape;

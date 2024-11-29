@@ -5,6 +5,7 @@
 #ifndef FRUITVISION_LOADIMAGE_H
 #define FRUITVISION_LOADIMAGE_H
 #include "../Components/TextField/TextField.h"
+#include "../Components/SImage/SImage.h"
 #include "../Interfaces/Layer.h"
 #include <filesystem>
 #define LOAD_COMMAND "load command"
@@ -30,6 +31,7 @@ private:
     const int i_index_of_textField=1;
     const int i_index_of_button_back=2;
     const int i_index_of_button_load=3;
+    const int i_index_of_image=4;
 
     const sf::Vector2f vf_textField_size={400,100};
     const sf::Vector2f vf_button_back_size={100,100};
@@ -43,8 +45,6 @@ private:
     const std::string str_feedback_ok = "Correct path!";
 
     sf::Color color_image_background = sf::Color::Green;
-    sf::Texture texture_image;
-    sf::RectangleShape rec_image;
     sf::Time time_lasttime;
     sf::Clock clock;
     sf::Text text_load_information;

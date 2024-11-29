@@ -28,6 +28,7 @@ void LoadImage::vFirstInit() {
     this->addComponent((Component*)new TextField(vf_textField_size.x,vf_textField_size.y));
     this->addComponent((Component*)new SButton(vf_button_back_size.x,vf_button_back_size.x,"back"));
     this->addComponent((Component*)new SButton(vf_button_load_size.x,vf_button_load_size.x,"load"));
+    this->addComponent((Component*)new SImage(vf_Image_load_size.x,vf_textField_size.y));
 
     ((TextField*)vec_components[i_index_of_informationField])->vSetFocusable(false);
     ((TextField*)vec_components[i_index_of_informationField])->vSetText(str_load_fail);
@@ -37,43 +38,44 @@ void LoadImage::vFirstInit() {
     ((SButton*)vec_components[i_index_of_button_back])->vSetOnClickCommand(str_return_command);
     ((SButton*)vec_components[i_index_of_button_load])->vSetOnClickCommand(LOAD_COMMAND);
 
+    ((SImage*)vec_components[i_index_of_image])->vSetBackgroundColor(color_image_background);
+
+
 
     for(auto& e : vec_components)e->addObservator(this);
-
-
-    rec_image.setSize(vf_Image_load_size);
-    rec_image.setFillColor(color_image_background);
 }
 
 void LoadImage::vSetPositions(float fl_window_size_x, float fl_window_size_y) {
+    float alpha = 1.1f;
     sf::Vector2f position = {fl_window_size_x/2.0f,fl_window_size_y*0.1f};
-    rec_image.setPosition(position.x - rec_image.getSize().x/2.0f,position.y);
-    position+={0,rec_image.getSize().y*1.1f};
+    vec_components[i_index_of_image]->vSetPosition(position.x - vec_components[i_index_of_image]->vfGetSize().x/2.0f,position.y);
+    position+={0,vec_components[i_index_of_image]->vfGetSize().y*alpha};
     vec_components[i_index_of_informationField]->vSetPosition(position.x-vec_components[i_index_of_textField]->vfGetSize().x/2,position.y);
-    position+={0,vec_components[i_index_of_informationField]->vfGetSize().y*1.1f};
+    position+={0,vec_components[i_index_of_informationField]->vfGetSize().y*alpha};
     vec_components[i_index_of_textField]->vSetPosition(position.x-vec_components[i_index_of_textField]->vfGetSize().x/2,position.y);
-    position+={0,vec_components[i_index_of_textField]->vfGetSize().y*1.1f};
+    position+={0,vec_components[i_index_of_textField]->vfGetSize().y*alpha};
     vec_components[i_index_of_button_back]->vSetPosition(position.x-vec_components[i_index_of_button_back]->vfGetSize().x,position.y);
     vec_components[i_index_of_button_load]->vSetPosition(position.x,position.y);
 }
 void LoadImage::vLoadTexture() {
 
     std::string str_curr_path = ((TextField*)vec_components[i_index_of_textField])->getText();
-    if(std::filesystem::exists(str_curr_path)){
-        try{
-            texture_image.loadFromFile(str_curr_path);
+    if(std::filesystem::exists(str_curr_path)) {
+        if (((SImage *) vec_components[i_index_of_image])->bLoadImage(str_curr_path)) {
             ((TextField *) vec_components[i_index_of_informationField])->vSetText(str_feedback_ok);
             str_path = str_curr_path;
             b_is_loaded = true;
-            rec_image.setTexture(&texture_image);
-        }catch(...){
+
+        } else {
             ((TextField *) vec_components[i_index_of_informationField])->vSetText(str_feedback_cannnot_open_file);
+
         }
     }else{
-        ((TextField*)vec_components[i_index_of_informationField])->vSetText(str_feedback_fail);
+        ((TextField *) vec_components[i_index_of_informationField])->vSetText(str_feedback_fail);
     }
-    if(!b_is_loaded)rec_image.setFillColor(color_image_background);
-    else rec_image.setFillColor(sf::Color::White);
+
+    if (!b_is_loaded)((SImage *) vec_components[i_index_of_image])->vSetBackgroundColor(color_image_background);
+    else ((SImage *) vec_components[i_index_of_image])->vSetBackgroundColor(sf::Color::White);
 }
 
 void LoadImage::vReset() {
@@ -104,7 +106,6 @@ bool LoadImage::executeCommand(std::string &str_command) {
 
 void LoadImage::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     Layer::draw(target, states);
-    target.draw(rec_image,states);
 }
 
 
