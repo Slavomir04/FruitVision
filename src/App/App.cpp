@@ -27,7 +27,7 @@ void App::vStart() {
         sf::Event event;
         while (window->pollEvent(event))
         {
-           // if(event.type == sf::Event::Resized)printf("resize {%i,%i}\n",window->getSize().x,window->getSize().y);
+
             if (event.type == sf::Event::Closed)
                 window->close();
             if(!vec_layer_contener.empty()){

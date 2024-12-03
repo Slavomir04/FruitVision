@@ -97,11 +97,11 @@ void LoadImage::vSetPositions(float fl_window_size_x, float fl_window_size_y) {
 }
 void LoadImage::vLoadTexture() {
 
-    std::string str_curr_path = ((TextField*)vec_components[i_index_of_textField])->getText();
-    if(std::filesystem::exists(str_curr_path)) {
-        if (((SImage *) vec_components[i_index_of_image])->bLoadImage(str_curr_path)) {
+    std::string str_temp_path = ((TextField*)vec_components[i_index_of_textField])->getText();
+    if(std::filesystem::exists(str_temp_path)) {
+        if (((SImage *) vec_components[i_index_of_image])->bLoadImage(str_temp_path)) {
             ((TextField *) vec_components[i_index_of_informationField])->vSetText(str_feedback_ok);
-            str_path = str_curr_path;
+            str_path = str_temp_path;
             b_is_loaded = true;
 
         } else {

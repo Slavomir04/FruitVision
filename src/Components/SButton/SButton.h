@@ -8,7 +8,7 @@
 #define DEFAULT_OUTLINE_THICKNES 4
 #define DEFAULT_CHARACTER_SIZE 30
 
-#define DEFAULT_FONT_PATH "../src/Resources/font.otf"
+#define DEFAULT_FONT_PATH "../src/Resources/font.ttf"
 #define FONT_CANNOT_LOAD_TEXT "nie mozna zaladowac czcionki! "
 #define DEFAULT_COMMAND "clicked"
 class SButton : public Button{
@@ -39,7 +39,7 @@ public:
     void vSetColorNoFocused(const sf::Color &color);
     void vSetColorOutline(const sf::Color &color);
     void vSetColorCharacter(const sf::Color &color);
-
+    void vSetMousePosition(sf::Vector2f v2f_mouse_pos);
 
      sf::Color color_default_pressed = sf::Color::Green;
      sf::Color color_default_focused = sf::Color(128,64,255);

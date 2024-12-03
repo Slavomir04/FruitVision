@@ -120,6 +120,9 @@ void SButton::vSetColorOutline(const sf::Color &color) {
 void SButton::vSetColorCharacter(const sf::Color &color) {
     this->color_character = color;
 }
+void SButton::vSetMousePosition(sf::Vector2f v2f_mouse_pos) {
+    this->v2f_mouse_position = v2f_mouse_pos;
+}
 void SButton::vFirstInit() {
     str_command = DEFAULT_COMMAND;
 
@@ -190,6 +193,8 @@ void SButton::vTrimTextSize() {
         textBounds = c_text.getGlobalBounds();  // Zaktualizuj wymiary tekstu
     }
 }
+
+
 
 
 

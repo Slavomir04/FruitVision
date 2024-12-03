@@ -60,7 +60,7 @@ void GetResult::vFirstInit() {
 
     ((TextField*)vec_components[i_index_of_informationField])->vSetFocusable(false);
     ((TextField*)vec_components[i_index_of_informationField])->vSetAlign(TextField::TextAlign_type::Center);
-    ((TextField*)vec_components[i_index_of_informationField])->vSetText(str_load_image_fail);
+    ((TextField*)vec_components[i_index_of_informationField])->vSetText("");
 
 
     ((SButton*)vec_components[i_index_of_button_back])->vSetOnClickCommand(str_return_command);

@@ -13,12 +13,21 @@ SImage::~SImage() {
 }
 bool SImage::bLoadImage(const std::string &str_path) {
     /*
-    bool b_result = this->pc_Texture->loadFromFile(str_path);
+    bool b_result = this->pc_Texture->loadFromFile(str_path_actual);
     if(b_result)pc_Shape->setTexture(pc_Texture);
     return b_result;
     */
     try{
         this->pc_Texture->loadFromFile(str_path);
+        pc_Shape->setTexture(pc_Texture);
+        return true;
+    }catch(...){
+        return false;
+    }
+}
+bool SImage::bLoadImage(const std::wstring &str_path) {
+    try{
+        //this->pc_Texture->loadFromFile(str_path);
         pc_Shape->setTexture(pc_Texture);
         return true;
     }catch(...){
@@ -55,6 +64,8 @@ void SImage::vFirstInit() {
 void SImage::vSetBackgroundColor(sf::Color color) {
     this->pc_Shape->setFillColor(color);
 }
+
+
 
 
 

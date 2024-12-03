@@ -25,11 +25,14 @@ public:
 
     void vSetSize(float fl_x, float fl_y) override; //override
     void vSetText(const std::string &text) override;
+    void vSetText(const std::wstring &text);
     void vSetAlign(TextAlign_type alignType);
 
 
     void vUpdate(const sf::RenderWindow &c_Window) override; //override
     void vUpdateEvent(sf::Event &c_Event) override; //override
+
+    std::wstring getTextW();
 
     const sf::Color color_default_focused = sf::Color::Yellow;
     const sf::Color color_default_nofocused = sf::Color::White;
@@ -42,12 +45,13 @@ private:
     void vText_left();
     void vText_right();
 
+    bool bValidChar(wchar_t c);
     char cGetCharFromEvent(sf::Event &c_Event);
 protected:
     void vFirstInit() override;
 
 private:
-
+    std::wstring wstr_text;
     TextAlign_type e_text_align;
 
     const int i_maximum_length;

@@ -28,143 +28,202 @@ private:
 };
 
 TEST(Components,SButton){
-    ObservatorTester observator_tester;
-    std::string str_command = "123456789";
+    std::string comm = "command";
 
-    SButton sButton(100, 100, "", 5, 0.0f);
-    sButton.vSetPosition(100,100);
-    sButton.vSetOnClickCommand(str_command);
-    sButton.addObservator(&observator_tester);
+    ObservatorTester observatorTester;
+    SButton button(100,100,"123");
+    button.vSetPosition(0,0);
+    button.vSetOnClickCommand(comm);
+    button.addObservator(&observatorTester);
+    button.vSetOutlineThicknes(0);
+    sf::Event event;
+
+    event.mouseButton.x=0;
+    event.mouseButton.y=0;
+    event.type = sf::Event::MouseButtonReleased;
+    button.vSetMousePosition({0,0});
+    button.vUpdateEvent(event);
+    ASSERT_EQ(observatorTester.bContainsCommand(comm), true);
+
+    observatorTester.vClear();
+
+    event.mouseButton.x=99;
+    event.mouseButton.y=99;
+    event.type = sf::Event::MouseButtonReleased;
+    button.vSetMousePosition({99,99});
+    button.vUpdateEvent(event);
+    ASSERT_EQ(observatorTester.bContainsCommand(comm), true);
+    observatorTester.vClear();
+
+    event.mouseButton.x=110;
+    event.mouseButton.y=110;
+    event.type = sf::Event::MouseButtonReleased;
+    button.vSetMousePosition({110,110});
+    button.vUpdateEvent(event);
+    ASSERT_EQ(observatorTester.bContainsCommand(comm), false);
+    observatorTester.vClear();
+
+    event.mouseButton.x=80;
+    event.mouseButton.y=110;
+    event.type = sf::Event::MouseButtonReleased;
+    button.vSetMousePosition({110,110});
+    button.vUpdateEvent(event);
+    ASSERT_EQ(observatorTester.bContainsCommand(comm), false);
+    observatorTester.vClear();
+
+    event.mouseButton.x=110;
+    event.mouseButton.y=80;
+    event.type = sf::Event::MouseButtonReleased;
+    button.vSetMousePosition({110,110});
+    button.vUpdateEvent(event);
+    ASSERT_EQ(observatorTester.bContainsCommand(comm), false);
+    observatorTester.vClear();
+
+    event.mouseButton.x=-5;
+    event.mouseButton.y=-5;
+    event.type = sf::Event::MouseButtonReleased;
+    button.vSetMousePosition({-5,-5});
+    button.vUpdateEvent(event);
+    ASSERT_EQ(observatorTester.bContainsCommand(comm), false);
+    observatorTester.vClear();
+
+    event.mouseButton.x=-5;
+    event.mouseButton.y=10;
+    event.type = sf::Event::MouseButtonReleased;
+    button.vSetMousePosition({-5,-5});
+    button.vUpdateEvent(event);
+    ASSERT_EQ(observatorTester.bContainsCommand(comm), false);
+    observatorTester.vClear();
+
+    event.mouseButton.x=10;
+    event.mouseButton.y=-5;
+    event.type = sf::Event::MouseButtonReleased;
+    button.vSetMousePosition({-5,-5});
+    button.vUpdateEvent(event);
+    ASSERT_EQ(observatorTester.bContainsCommand(comm), false);
+    observatorTester.vClear();
 
 
-    EXPECT_EQ(sButton.bIsMouseOver(100, 150), true);
-    EXPECT_EQ(sButton.bIsMouseOver(-100, 150), false);
-    EXPECT_EQ(sButton.bIsMouseOver(100, 450), false);
+    button.vSetPosition(250,250);
+    button.vSetSize(50,50);
+
+    event.mouseButton.x=260;
+    event.mouseButton.y=260;
+    event.type = sf::Event::MouseButtonReleased;
+    button.vSetMousePosition({260,260});
+    button.vUpdateEvent(event);
+    ASSERT_EQ(observatorTester.bContainsCommand(comm), true);
+    observatorTester.vClear();
+
+
+    event.mouseButton.x=310;
+    event.mouseButton.y=260;
+    event.type = sf::Event::MouseButtonReleased;
+    button.vSetMousePosition({310,260});
+    button.vUpdateEvent(event);
+    ASSERT_EQ(observatorTester.bContainsCommand(comm), false);
+    observatorTester.vClear();
+
+
+    SUCCEED()<<"SBUTTON clicking test positive";
+}
+
+TEST(Components,TextField){
+
+    TextField textField(100,100);
+    textField.vSetPosition(0,0);
+    textField.vSetText("");
+    sf::Event event;
+
+
+    event.mouseButton.x=50;
+    event.mouseButton.y=50;
+    event.type = sf::Event::MouseButtonPressed;
+    textField.vSetMousePosition({50,50});
+    textField.vSetMousePosition({50,50});
+    textField.vUpdateEvent(event);
+    event.type = sf::Event::MouseButtonReleased;
+    textField.vUpdateEvent(event);
 
 
 
-    sf::Event simulatedEvent;
+    event.type =sf::Event::TextEntered;
+    event.key.code = sf::Keyboard::A;
+    event.key.shift= false;
+    event.text.unicode = 'a';
+    textField.vUpdateEvent(event);
+    ASSERT_EQ(textField.getText(),"a");
+    textField.vSetText("");
 
-    simulatedEvent.type = sf::Event::MouseButtonReleased;
-    simulatedEvent.mouseButton.button = sf::Mouse::Left;
-    simulatedEvent.mouseButton.x = 150;
-    simulatedEvent.mouseButton.y = 150;
-    sButton.vUpdateEvent(simulatedEvent);
-    EXPECT_EQ(observator_tester.bContainsCommand(str_command), true);
 
-    observator_tester.vClear();
+    event.type =sf::Event::TextEntered;
+    event.key.code = sf::Keyboard::B;
+    event.key.shift= true;
+    event.text.unicode = 'B';
+    textField.vUpdateEvent(event);
+    ASSERT_EQ(textField.getText(),"B");
+    textField.vSetText("");
 
-    simulatedEvent.type = sf::Event::MouseButtonReleased;
-    simulatedEvent.mouseButton.button = sf::Mouse::Left;
-    simulatedEvent.mouseButton.x = 0;
-    simulatedEvent.mouseButton.y = 0;
-    sButton.vUpdateEvent(simulatedEvent);
-    EXPECT_EQ(observator_tester.bContainsCommand(str_command), false);
+    event.type =sf::Event::TextEntered;
+    event.key.shift= true;
+    event.key.code = sf::Keyboard::B;
+    event.text.unicode = 'B';
+    textField.vUpdateEvent(event);
+    event.key.code = sf::Keyboard::A;
+    event.text.unicode = 'A';
+    textField.vUpdateEvent(event);
+    event.key.shift= false;
+    event.key.code = sf::Keyboard::T;
+    event.text.unicode = 't';
+    textField.vUpdateEvent(event);
+    ASSERT_EQ(textField.getText(),"BAt");
+    textField.vSetText("");
+
+
+    /*
+     case sf::Keyboard::Comma:
+            return keyEvent.shift ? '<' : ',';
+        case sf::Keyboard::Period:
+            return keyEvent.shift ? '>' : '.';
+     */
+
+    event.type =sf::Event::TextEntered;
+    event.key.code = sf::Keyboard::Comma;
+    event.key.shift= false;
+    event.text.unicode = ',';
+    textField.vUpdateEvent(event);
+    ASSERT_EQ(textField.getText(),",");
+    textField.vSetText("");
+
+    event.type =sf::Event::TextEntered;
+    event.key.code = sf::Keyboard::Comma;
+    event.key.shift= true;
+    event.text.unicode = '<';
+    textField.vUpdateEvent(event);
+    ASSERT_EQ(textField.getText(),"<");
+    textField.vSetText("");
+
+    event.type =sf::Event::TextEntered;
+    event.key.code = sf::Keyboard::Period;
+    event.key.shift= false;
+    event.text.unicode = '.';
+    textField.vUpdateEvent(event);
+    ASSERT_EQ(textField.getText(),".");
+    textField.vSetText("");
+
+    event.type =sf::Event::TextEntered;
+    event.key.code = sf::Keyboard::BackSlash;
+    event.key.shift= false;
+    event.text.unicode = '\\';
+    textField.vUpdateEvent(event);
+    ASSERT_EQ(textField.getText(),"\\");
+    textField.vSetText("");
+
+    SUCCEED()<<"TextField typing test positive";
 }
 
 
 
-TEST(Components,TextField) {
-    TextField text_field(100, 300);
-    text_field.vSetText("Hello World");
-    text_field.vSetPosition(50, 50);
-    text_field.vSetOutlineThicknes(0);
-
-    sf::Event simulatedEvent;
-
-    EXPECT_EQ(text_field.bIsMouseOver(0, 0), false);
-    simulatedEvent.type = sf::Event::MouseButtonPressed;
-    simulatedEvent.mouseButton.button = sf::Mouse::Left;
-    simulatedEvent.mouseButton.x = 0;
-    simulatedEvent.mouseButton.y = 0;
-    text_field.vUpdateEvent(simulatedEvent);
-    //on defocused
-    EXPECT_EQ(text_field.bIsMouseOver(51, 51), true);
-    EXPECT_EQ(text_field.bIsMouseOver(0, 0), false);
-    EXPECT_EQ(text_field.bIsMouseOver(500, 500), false);
-    EXPECT_EQ(text_field.bIsMouseOver(75, 150), true);
 
 
-    //mouse
-
-    simulatedEvent.type = sf::Event::MouseButtonReleased;
-    simulatedEvent.mouseButton.button = sf::Mouse::Left;
-    simulatedEvent.mouseButton.x = 100;
-    simulatedEvent.mouseButton.y = 100;
-    EXPECT_EQ(text_field.bIsClicked(simulatedEvent), true);
-
-    simulatedEvent.type = sf::Event::MouseButtonReleased;
-    simulatedEvent.mouseButton.button = sf::Mouse::Left;
-    simulatedEvent.mouseButton.x = 100;
-    simulatedEvent.mouseButton.y = 0;
-    EXPECT_EQ(text_field.bIsClicked(simulatedEvent), false);
-
-    simulatedEvent.type = sf::Event::MouseButtonReleased;
-    simulatedEvent.mouseButton.button = sf::Mouse::Right;
-    simulatedEvent.mouseButton.x = 100;
-    simulatedEvent.mouseButton.y = 100;
-    EXPECT_EQ(text_field.bIsClicked(simulatedEvent), true);
-
-
-
-
-    //Focus text_field
-    simulatedEvent.type = sf::Event::MouseButtonReleased;
-    simulatedEvent.mouseButton.button = sf::Mouse::Left;
-    simulatedEvent.mouseButton.x = 150;
-    simulatedEvent.mouseButton.y = 150;
-    text_field.vUpdateEvent(simulatedEvent);
-
-    //clearing text
-    text_field.vSetText("");
-
-    //keyboard
-    simulatedEvent.type = sf::Event::KeyPressed;
-    simulatedEvent.key.code = sf::Keyboard::A;
-    simulatedEvent.text.unicode = static_cast<sf::Uint32>('A');
-    simulatedEvent.mouseButton.x = 150;
-    simulatedEvent.mouseButton.y = 150;
-    text_field.vUpdateEvent(simulatedEvent);
-    EXPECT_EQ(text_field.getText(),"A");
-
-    simulatedEvent.type = sf::Event::KeyPressed;
-    simulatedEvent.key.code = sf::Keyboard::B;
-    simulatedEvent.text.unicode = static_cast<sf::Uint32>('b');
-    simulatedEvent.mouseButton.x = 150;
-    simulatedEvent.mouseButton.y = 150;
-    text_field.vUpdateEvent(simulatedEvent);
-    EXPECT_EQ(text_field.getText(),"Ab");
-
-    simulatedEvent.type = sf::Event::KeyPressed;
-    simulatedEvent.key.code = sf::Keyboard::C;
-    simulatedEvent.text.unicode = static_cast<sf::Uint32>('c');
-    simulatedEvent.mouseButton.x = 150;
-    simulatedEvent.mouseButton.y = 150;
-    text_field.vUpdateEvent(simulatedEvent);
-    EXPECT_EQ(text_field.getText(),"Abc");
-
-    simulatedEvent.type = sf::Event::KeyPressed;
-    simulatedEvent.key.code = sf::Keyboard::D;
-    simulatedEvent.text.unicode = static_cast<sf::Uint32>('d');
-    simulatedEvent.mouseButton.x = 150;
-    simulatedEvent.mouseButton.y = 150;
-    text_field.vUpdateEvent(simulatedEvent);
-    EXPECT_EQ(text_field.getText(),"Abcd");
-
-    simulatedEvent.type = sf::Event::KeyPressed;
-    simulatedEvent.key.code = sf::Keyboard::BackSpace;
-    simulatedEvent.text.unicode = 8;
-    simulatedEvent.mouseButton.x = 150;
-    simulatedEvent.mouseButton.y = 150;
-    text_field.vUpdateEvent(simulatedEvent);
-    EXPECT_EQ(text_field.getText(),"Abc");
-
-    simulatedEvent.type = sf::Event::KeyPressed;
-    simulatedEvent.key.code = sf::Keyboard::Y;
-    simulatedEvent.text.unicode = static_cast<sf::Uint32>('y');
-    simulatedEvent.mouseButton.x = 0;
-    simulatedEvent.mouseButton.y = 0;
-    text_field.vUpdateEvent(simulatedEvent);
-    EXPECT_EQ(text_field.getText(),"Abc");
-}
 

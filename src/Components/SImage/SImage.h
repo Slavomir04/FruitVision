@@ -12,6 +12,7 @@ public:
     ~SImage() override;
 
     bool bLoadImage(const std::string &str_path);
+    bool bLoadImage(const std::wstring &str_path);
 
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 

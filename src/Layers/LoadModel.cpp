@@ -84,18 +84,19 @@ void LoadModel::vSetPositions(float fl_window_size_x, float fl_window_size_y) {
 }
 void LoadModel::vLoadModel() {
 
-    std::string str_curr_path = ((TextField*)vec_components[i_index_of_textField])->getText();
-    if(std::filesystem::exists(str_curr_path)){
+    std::wstring wstr_temp = ((TextField*)vec_components[i_index_of_textField])->getTextW();
+    if(std::filesystem::exists(wstr_temp)){
         ((TextField*)vec_components[i_index_of_informationField])->vSetText(str_feedback_ok);
-        str_path = str_curr_path;
+        str_path_actual = wstr_temp;
         b_is_loaded = true;
     }else{
         ((TextField*)vec_components[i_index_of_informationField])->vSetText(str_feedback_fail);
     }
 }
 void LoadModel::vReset() {
+
     if(b_is_loaded){
-        std::string str_loaded_text = str_path;
+        std::string str_loaded_text =std::string(str_path_actual.begin(), str_path_actual.end());
         std::string str_result;
         if(str_loaded_text.size() + str_load_ok.size() >= i_maximum_information_length){
             int first_pos = str_loaded_text.size() - (i_maximum_information_length - str_load_ok.size()-3);
@@ -107,6 +108,7 @@ void LoadModel::vReset() {
     }else{
         ((TextField*)vec_components[i_index_of_informationField])->vSetText(str_load_fail);
     }
+
 }
 
 
