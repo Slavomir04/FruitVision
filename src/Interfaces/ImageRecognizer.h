@@ -10,6 +10,8 @@
 
 class ImageRecognizer {
 public:
+    virtual ~ImageRecognizer() = default;
+
     virtual std::vector<std::pair<std::string,double>> vecGetResult();
     virtual bool vLoadModel(std::string str_adres);
     virtual bool vLoadImage(std::string str_adres);

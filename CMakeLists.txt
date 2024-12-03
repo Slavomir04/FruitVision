@@ -4,6 +4,8 @@ project(FruitVision)
 
 set(CMAKE_CXX_STANDARD 17)
 
+
+
 add_executable(FruitVision main.cpp
         src/Interfaces/Observator.h
         src/Interfaces/Observable.h
@@ -29,13 +31,16 @@ add_executable(FruitVision main.cpp
         src/Layers/GetResult.h
         src/Components/SImage/SImage.cpp
         src/Components/SImage/SImage.h
+        src/ImageRecognizer/ImageRecognizerTest.cpp
+        src/ImageRecognizer/ImageRecognizerTest.h
 )
+
+
+
 set(SFML_STATIC_LIBRARIES TRUE)
 
 
-
-
-set(WHERE_SFML D:/Programownie/SFML-2.6.1-windows-gcc-13.1.0-mingw-64-bit/SFML-2.6.1)
+set(WHERE_SFML C:/programowanie/libraries/SFML-2.6.1)
 
 set(SFML_DIR ${WHERE_SFML}/lib/cmake/SFML)
 find_package(SFML COMPONENTS system window graphics audio network REQUIRED)
