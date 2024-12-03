@@ -9,9 +9,10 @@
 #include <vector>
 #include "../Interfaces/Layer.h"
 #include "../Layers/MenuLayer.h"
+#include "../Layers/GetResult.h"
 #include "../Layers/LoadModel.h"
 #include "../Layers/LoadImage.h"
-#include "../Layers/GetResult.h"
+#include "../ImageRecognizer/ImageRecognizer_1.h"
 class App : Observator{
 public:
     App(int i_window_size_x,int i_window_size_y,std::string str_name);
@@ -36,6 +37,7 @@ private:
     const std::string str_load_model = "load model";
     const std::string str_load_image = "load image";
 
+    ImageRecognizer* imageRecognizer;
 };
 
 

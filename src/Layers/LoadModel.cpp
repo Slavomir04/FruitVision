@@ -10,7 +10,11 @@ LoadModel::LoadModel(std::string str_return_command) : str_return_command(str_re
 
 void LoadModel::vUpdate(const sf::RenderWindow &c_Window) {
     Layer::vUpdate(c_Window);
-    vSetPositions(c_Window.getSize().x,c_Window.getSize().y);
+    if(b_resized || b_first_init) {
+        vSetPositions(c_Window.getSize().x, c_Window.getSize().y);
+        b_resized= false;
+        b_first_init= false;
+    }
     if((clock.getElapsedTime() - time_lasttime).asMilliseconds() > WAIT_TIME){
         vReset();
         time_lasttime = clock.getElapsedTime();
@@ -19,16 +23,19 @@ void LoadModel::vUpdate(const sf::RenderWindow &c_Window) {
 
 void LoadModel::vUpdateEvent(sf::Event &c_Event) {
     Layer::vUpdateEvent(c_Event);
+    b_resized = (c_Event.type == sf::Event::Resized);
 }
 
 void LoadModel::vFirstInit() {
-    time_lasttime = clock.restart();
+    b_resized= true;
+    b_first_init= true;
     b_is_loaded= false;
+    time_lasttime = clock.restart();
 
-    this->addComponent((Component*)new TextField(vf_textField_size.x,vf_textField_size.y));
-    this->addComponent((Component*)new TextField(vf_textField_size.x,vf_textField_size.y));
-    this->addComponent((Component*)new SButton(vf_button_back_size.x,vf_button_back_size.x,"back"));
-    this->addComponent((Component*)new SButton(vf_button_load_size.x,vf_button_load_size.x,"load"));
+    this->addComponent((Component*)new TextField(100, 100));
+    this->addComponent((Component*)new TextField(100, 100));
+    this->addComponent((Component*)new SButton(100, 100, str_button_back_name));
+    this->addComponent((Component*)new SButton(100,100,str_button_load_name));
 
     ((TextField*)vec_components[i_index_of_informationField])->vSetFocusable(false);
     ((TextField*)vec_components[i_index_of_informationField])->vSetText(str_load_fail);
@@ -36,20 +43,44 @@ void LoadModel::vFirstInit() {
 
 
     ((SButton*)vec_components[i_index_of_button_back])->vSetOnClickCommand(str_return_command);
-    ((SButton*)vec_components[i_index_of_button_load])->vSetOnClickCommand(LOAD_COMMAND);
+    ((SButton*)vec_components[i_index_of_button_load])->vSetOnClickCommand(comm::str_Button_model_load);
 
 
     for(auto& e : vec_components)e->addObservator(this);
 }
 
 void LoadModel::vSetPositions(float fl_window_size_x, float fl_window_size_y) {
-    sf::Vector2f position = {fl_window_size_x/2.0f,fl_window_size_y*0.1f};
-    vec_components[i_index_of_informationField]->vSetPosition(position.x-vec_components[i_index_of_textField]->vfGetSize().x/2,position.y);
-    position+={0,vec_components[i_index_of_informationField]->vfGetSize().y*1.1f};
-    vec_components[i_index_of_textField]->vSetPosition(position.x-vec_components[i_index_of_textField]->vfGetSize().x/2,position.y);
-    position+={0,vec_components[i_index_of_textField]->vfGetSize().y*1.1f};
-    vec_components[i_index_of_button_back]->vSetPosition(position.x-vec_components[i_index_of_button_back]->vfGetSize().x,position.y);
-    vec_components[i_index_of_button_load]->vSetPosition(position.x,position.y);
+    sf::Vector2f v2f_position = {fl_window_size_x/2.0f,0}; //center x
+
+    float fl_textField_size_x = fl_window_size_x*vf_scale_textField.x;
+    float fl_textField_size_y = fl_window_size_x*vf_scale_textField.y;
+    float fl_textField_shift_y = fl_textField_size_y*fl_scale_shift;
+
+    float fl_button_size_x = fl_window_size_x*vf_scale_buttons.x;
+    float fl_button_size_y = fl_window_size_x*vf_scale_buttons.y;
+    float fl_button_shift_x = fl_button_size_x*fl_scale_shift;
+
+    v2f_position += {-fl_textField_size_x/2.0f,fl_textField_shift_y};
+
+    vec_components[i_index_of_informationField]->vSetSize(fl_textField_size_x,fl_textField_size_y);
+    vec_components[i_index_of_informationField]->vSetPosition(v2f_position.x,v2f_position.y);
+    v2f_position += {0,fl_textField_size_y+fl_textField_shift_y};
+
+    vec_components[i_index_of_textField]->vSetSize(fl_textField_size_x,fl_textField_size_y);
+    vec_components[i_index_of_textField]->vSetPosition(v2f_position.x,v2f_position.y);
+    v2f_position += {0,fl_textField_size_y+fl_textField_shift_y};
+
+    v2f_position = {fl_window_size_x/2.0f,v2f_position.y}; //recenter x
+    v2f_position += {-fl_textField_size_x/2.0f + fl_button_shift_x,0};
+    vec_components[i_index_of_button_back]->vSetSize(fl_button_size_x,fl_button_size_y);
+    vec_components[i_index_of_button_back]->vSetPosition(v2f_position.x,v2f_position.y);
+
+    v2f_position = {fl_window_size_x/2.0f,v2f_position.y}; //recenter x
+    v2f_position += {fl_textField_size_x/2.0f - fl_button_size_x - fl_button_shift_x,0};
+    vec_components[i_index_of_button_load]->vSetSize(fl_button_size_x,fl_button_size_y);
+    vec_components[i_index_of_button_load]->vSetPosition(v2f_position.x,v2f_position.y);
+
+
 }
 void LoadModel::vLoadModel() {
 
@@ -84,7 +115,7 @@ bool LoadModel::executeCommand(std::string &str_command) {
         provideCommand(str_return_command);
         ((TextField*)vec_components[i_index_of_textField])->vSetText("");
     }
-    else if(str_command == LOAD_COMMAND)vLoadModel();
+    else if(str_command == comm::str_Button_model_load)vLoadModel();
     return true;
 }
 

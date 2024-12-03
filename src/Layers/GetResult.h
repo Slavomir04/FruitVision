@@ -10,7 +10,7 @@
 #include "../Interfaces/ImageRecognizer.h"
 #include <filesystem>
 
-#define GET_RESULT_COMMAND "get result"
+
 
 class GetResult : public Layer{
 public:
@@ -34,10 +34,17 @@ private:
     void vGetResult();
     void vReset();
 
-    sf::Vector2f vf_image_size={200,200};
-    sf::Vector2f vf_informationField_size={200,200};
-    sf::Vector2f vf_button_back_size={100,100};
-    sf::Vector2f vf_button_get_size={100,100};
+    const int i_index_of_informationField=0;
+    const int i_index_of_button_back=1;
+    const int i_index_of_button_get=2;
+    const int i_index_of_image=3;
+
+
+    float fl_scale_shift = 0.1f;
+    sf::Vector2f vf_scale_image={0.3f, 0.3f};
+    sf::Vector2f vf_scale_informationField={0.3f, 0.1f};
+    sf::Vector2f vf_scale_buttons={0.1f,0.1f};
+
 
     bool b_is_image_loaded;
     bool b_is_model_loaded;
@@ -46,20 +53,16 @@ private:
     std::string str_load_model_fail="no image loaded";
     std::string str_load_image_ok="image loaded";
     std::string str_load_model_ok="image loaded";
+    std::string str_text_button_back = "back";
+    std::string str_text_button_get = "get";
 
 
-    ImageRecognizer* pc_imageRecognizer;
     sf::Color color_image_background = sf::Color::Green;
-    const int i_index_of_informationField=0;
-    const int i_index_of_button_back=1;
-    const int i_index_of_button_get=2;
-    const int i_index_of_image=3;
-
-
-
     std::string str_return_command;
 
-
+    bool b_resized;
+    bool b_first_init;
+    ImageRecognizer* pc_imageRecognizer;
 };
 
 

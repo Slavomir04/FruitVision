@@ -8,11 +8,11 @@
 #include "../Components/SImage/SImage.h"
 #include "../Interfaces/Layer.h"
 #include <filesystem>
-#define LOAD_COMMAND "load command"
 #define WAIT_TIME 1000
 class LoadImage : public Layer{
 public:
     LoadImage(std::string str_return_command);
+
     void vUpdate(const sf::RenderWindow &c_Window) override;
     void vUpdateEvent(sf::Event &c_Event) override;
 
@@ -33,18 +33,20 @@ private:
     const int i_index_of_button_load=3;
     const int i_index_of_image=4;
 
-    const sf::Vector2f vf_textField_size={400,100};
-    const sf::Vector2f vf_button_back_size={100,100};
-    const sf::Vector2f vf_button_load_size={100,100};
-    const sf::Vector2f vf_Image_load_size={100,100};
+    float fl_scale_shift = 0.1f;
+    sf::Vector2f vf_scale_textField={0.3f, 0.1f};
+    sf::Vector2f vf_scale_buttons={0.1f, 0.1f};
+    const sf::Vector2f vf_Image_scale_size={0.5f,0.5f};
 
-    const std::string str_load_ok = "Loaded model";
-    const std::string str_load_fail = "no Image loaded";
-    const std::string str_feedback_fail = "wrong path!";
-    const std::string str_feedback_cannnot_open_file = "cannot open file!";
-    const std::string str_feedback_ok = "Correct path!";
+    std::string str_load_ok = "Loaded image";
+    std::string str_load_fail = "no Image loaded";
+    std::string str_feedback_fail = "wrong path!";
+    std::string str_feedback_cannnot_open_file = "cannot open file!";
+    std::string str_feedback_ok = "Correct path!";
+    std::string str_button_back_name = "back";
+    std::string str_button_load_name = "load";
 
-    sf::Color color_image_background = sf::Color::Green;
+    sf::Color color_image_background = {sf::Color::Blue};
     sf::Time time_lasttime;
     sf::Clock clock;
     sf::Text text_load_information;
@@ -52,6 +54,8 @@ private:
     std::string str_path;
     bool b_is_loaded;
 
+    bool b_resized;
+    bool b_first_init;
     const int i_maximum_information_length;
 };
 

@@ -33,7 +33,7 @@ bool SButton::bIsMouseOver(float fl_mouse_x, float fl_mouse_y) {
 }
 
 bool SButton::bIsClicked(sf::Event &event) {
-    return bIsMouseOver(event.mouseButton.x, event.mouseButton.y) &&
+    return bIsMouseOver(v2f_mouse_position.x,v2f_mouse_position.y) &&
            (event.type == sf::Event::MouseButtonReleased);
 }
 void SButton::draw(sf::RenderTarget &target, sf::RenderStates states) const {
@@ -55,8 +55,9 @@ sf::Vector2f SButton::vfGetPosition() {
 }
 
 void SButton::vUpdate(const sf::RenderWindow &c_Window) {
-    sf::Vector2i mousePosition = sf::Mouse::getPosition(c_Window);
-    b_is_focused = bIsMouseOver((float)mousePosition.x,(float )mousePosition.y);
+
+    v2f_mouse_position = c_Window.mapPixelToCoords(sf::Mouse::getPosition(c_Window));
+    b_is_focused = bIsMouseOver((float)v2f_mouse_position.x,(float )v2f_mouse_position.y);
     vShape_update();
 }
 

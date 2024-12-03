@@ -57,6 +57,7 @@ protected:
     bool bLoadFont(std::string str_path);
     void vTrimTextSize();
 
+    sf::Vector2f v2f_mouse_position;
     sf::RectangleShape c_shape;
     sf::Text c_text;
     sf::Font c_font;

@@ -33,8 +33,9 @@ void TextField::vSetSize(float fl_x, float fl_y) {
 }
 void TextField::vSetText(const std::string &text){
     c_text.setString(text);
-    vAlignText();
-    vTrimTextSize();
+    vAlignText(); //reposition text
+    vTrimTextSize(); //resize
+    vAlignText(); //again reposition text
 }
 void TextField::vSetAlign(TextField::TextAlign_type alignType) {
     this->e_text_align =alignType;
@@ -44,6 +45,7 @@ void TextField::vSetAlign(TextField::TextAlign_type alignType) {
 
 
 void TextField::vUpdate(const sf::RenderWindow &c_Window) {
+    v2f_mouse_position = c_Window.mapPixelToCoords(sf::Mouse::getPosition(c_Window));
     vShape_update();
 }
 

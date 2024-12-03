@@ -7,15 +7,14 @@
 #include "../Components/TextField/TextField.h"
 #include "../Interfaces/Layer.h"
 #include <filesystem>
-#define LOAD_COMMAND "load command"
 #define WAIT_TIME 1000
 
 class LoadModel : public Layer{
 public:
     LoadModel(std::string str_return_command);
+
     void vUpdate(const sf::RenderWindow &c_Window) override;
     void vUpdateEvent(sf::Event &c_Event) override;
-
     bool executeCommand(std::string &str_command) override;
 
 private:
@@ -29,14 +28,19 @@ private:
     const int i_index_of_button_back=2;
     const int i_index_of_button_load=3;
 
-    const sf::Vector2f vf_textField_size={400,100};
-    const sf::Vector2f vf_button_back_size={100,100};
-    const sf::Vector2f vf_button_load_size={100,100};
+    //scale
+    float fl_scale_shift = 0.1f;
+    sf::Vector2f vf_scale_textField={0.3f, 0.1f};
+    sf::Vector2f vf_scale_buttons={0.12f, 0.1f};
 
-    const std::string str_load_ok = "Loaded model";
-    const std::string str_load_fail = "no model loaded";
-    const std::string str_feedback_fail = "wrong path!";
-    const std::string str_feedback_ok = "Correct path!";
+
+    //default strings
+    std::string str_load_ok = "Loaded model";
+    std::string str_load_fail = "no model loaded";
+    std::string str_feedback_fail = "wrong path!";
+    std::string str_feedback_ok = "Correct path!";
+    std::string str_button_back_name = "back";
+    std::string str_button_load_name = "load";
 
     sf::Time time_lasttime;
     sf::Clock clock;
@@ -45,6 +49,8 @@ private:
     std::string str_path;
     bool b_is_loaded;
 
+    bool b_resized;
+    bool b_first_init;
     const int i_maximum_information_length;
 };
 

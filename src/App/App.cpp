@@ -7,7 +7,8 @@
 
 
 App::App(int i_window_size_x, int i_window_size_y, std::string str_name) {
-    this->window = new sf::RenderWindow(sf::VideoMode(i_window_size_x, i_window_size_y), str_name,sf::Style::Titlebar | sf::Style::Close);
+   // this->window = new sf::RenderWindow(sf::VideoMode(i_window_size_x, i_window_size_y), str_name,sf::Style::Titlebar | sf::Style::Close);
+    this->window = new sf::RenderWindow(sf::VideoMode(i_window_size_x, i_window_size_y), str_name);
     vFirstInit();
 }
 App::~App() {
@@ -15,6 +16,7 @@ App::~App() {
         delete e;
     }
     delete window;
+    delete imageRecognizer;
 }
 
 void App::vStart() {
@@ -25,6 +27,7 @@ void App::vStart() {
         sf::Event event;
         while (window->pollEvent(event))
         {
+           // if(event.type == sf::Event::Resized)printf("resize {%i,%i}\n",window->getSize().x,window->getSize().y);
             if (event.type == sf::Event::Closed)
                 window->close();
             if(!vec_layer_contener.empty()){
@@ -41,16 +44,17 @@ void App::vStart() {
 }
 
 void App::vFirstInit() {
-
+    imageRecognizer = (ImageRecognizer*)new ImageRecognizer_1();
 
     this->i_current_target=0;
 
-    this->vec_layer_contener.push_back((Layer*)new MenuLayer(*this,window->getSize().x*0.2,window->getSize().x*0.1));
+    this->vec_layer_contener.push_back((Layer*)new MenuLayer());
+    vec_layer_contener[i_index_menu]->addObservator(this);
     ((MenuLayer*)vec_layer_contener[i_index_menu])->vAddSButton("Get Result",str_get_result);
     ((MenuLayer*)vec_layer_contener[i_index_menu])->vAddSButton("Load image",str_load_image);
     ((MenuLayer*)vec_layer_contener[i_index_menu])->vAddSButton("Load model", str_load_model);
 
-    this->vec_layer_contener.push_back((Layer*)new LoadModel(str_return_to_menu));
+    this->vec_layer_contener.push_back((Layer*)new GetResult(str_return_to_menu,imageRecognizer));
     vec_layer_contener[i_index_getresult]->addObservator(this);
 
     this->vec_layer_contener.push_back((Layer*)new LoadImage(str_return_to_menu));
