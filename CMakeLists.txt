@@ -5,8 +5,36 @@ project(FruitVision)
 set(CMAKE_CXX_STANDARD 17)
 
 
-
 add_executable(FruitVision main.cpp
+        src/Interfaces/Observator.h
+        src/Interfaces/Observable.h
+        src/App/App.cpp
+        src/App/App.h
+        src/Interfaces/Component.h
+        src/Interfaces/Layer.h
+        src/Interfaces/ImageRecognizer.h
+        src/Interfaces/Updateable.h
+        src/Components/Button.h
+        src/Components/TextField/TextField.cpp
+        src/Components/TextField/TextField.h
+        src/Components/SButton/SButton.cpp
+        src/Components/SButton/SButton.h
+        src/Interfaces/Commands.h
+        src/Layers/MenuLayer.cpp
+        src/Layers/MenuLayer.h
+        src/Layers/LoadModel.cpp
+        src/Layers/LoadModel.h
+        src/Layers/LoadImage.cpp
+        src/Layers/LoadImage.h
+        src/Layers/GetResult.cpp
+        src/Layers/GetResult.h
+        src/Components/SImage/SImage.cpp
+        src/Components/SImage/SImage.h
+        src/ImageRecognizer/ImageRecognizerTest.cpp
+        src/ImageRecognizer/ImageRecognizerTest.h
+)
+add_executable(test
+        tests/test.cpp
         src/Interfaces/Observator.h
         src/Interfaces/Observable.h
         src/App/App.cpp
@@ -37,16 +65,25 @@ add_executable(FruitVision main.cpp
 
 
 
+
 set(SFML_STATIC_LIBRARIES TRUE)
+find_package(SFML COMPONENTS system window graphics audio network QUIET)
 
+if (NOT SFML_FOUND)
+    message(STATUS "SFML not found, fetching from GitHub...")
+    include(FetchContent)
+    set(BUILD_SHARED_LIBS OFF)
+    FetchContent_Declare(
+            SFML
+            GIT_REPOSITORY https://github.com/SFML/SFML.git
+            GIT_TAG       2.6.1
+    )
+    FetchContent_MakeAvailable(SFML)
 
-set(WHERE_SFML C:/programowanie/libraries/SFML-2.6.1)
-
-set(SFML_DIR ${WHERE_SFML}/lib/cmake/SFML)
-find_package(SFML COMPONENTS system window graphics audio network REQUIRED)
-
-include_directories(${WHERE_SFML}/include/SFML)
+endif()
 target_link_libraries(${PROJECT_NAME} sfml-system sfml-window sfml-graphics sfml-audio)
+
+
 
 
 include(FetchContent)
@@ -56,33 +93,6 @@ FetchContent_Declare(
         GIT_TAG release-1.11.0
 )
 FetchContent_MakeAvailable(googletest)
-
-
-add_executable(test
-        tests/test.cpp
-        src/Interfaces/Observator.h
-        src/Interfaces/Observable.h
-        src/App/App.cpp
-        src/App/App.h
-        src/Interfaces/Component.h
-        src/Interfaces/Layer.h
-        src/Interfaces/ImageRecognizer.h
-        src/Interfaces/Updateable.h
-        src/Components/Button.h
-        src/Components/TextField/TextField.cpp
-        src/Components/TextField/TextField.h
-        src/Components/SButton/SButton.cpp
-        src/Components/SButton/SButton.h
-        src/Interfaces/Commands.h
-        src/Layers/MenuLayer.cpp
-        src/Layers/MenuLayer.h
-        src/Layers/LoadModel.cpp
-        src/Layers/LoadModel.h
-        src/Components/SImage/SImage.cpp
-        src/Components/SImage/SImage.h
-)
-
-
 target_link_libraries(test gtest_main)
 target_link_libraries(test sfml-system sfml-window sfml-graphics sfml-audio)
 add_test(NAME test COMMAND test)
