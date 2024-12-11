@@ -140,7 +140,7 @@ void TextField::vText_right() {
 
 
 bool TextField::bValidChar(wchar_t c) {
-    return c!=8;
+    return 31<c;
 }
 
 

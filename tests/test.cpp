@@ -180,12 +180,7 @@ TEST(Components,TextField){
     textField.vSetText("");
 
 
-    /*
-     case sf::Keyboard::Comma:
-            return keyEvent.shift ? '<' : ',';
-        case sf::Keyboard::Period:
-            return keyEvent.shift ? '>' : '.';
-     */
+
 
     event.type =sf::Event::TextEntered;
     event.key.code = sf::Keyboard::Comma;

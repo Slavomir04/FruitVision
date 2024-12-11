@@ -8,7 +8,7 @@
 #include "../Components/SImage/SImage.h"
 #include "../Interfaces/Layer.h"
 #include <filesystem>
-#define WAIT_TIME 1000
+#define WAIT_TIME 3000
 class LoadImage : public Layer{
 public:
     LoadImage(std::string str_return_command);
