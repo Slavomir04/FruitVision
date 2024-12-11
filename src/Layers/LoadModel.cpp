@@ -4,7 +4,7 @@
 
 #include "LoadModel.h"
 
-LoadModel::LoadModel(std::string str_return_command) : str_return_command(str_return_command),i_maximum_information_length(50){
+LoadModel::LoadModel(std::string str_return_command,ImageRecognizer* imageRecognizer) : str_return_command(str_return_command),i_maximum_information_length(50),pc_imageRecognizer(imageRecognizer){
     vFirstInit();
 }
 
@@ -85,7 +85,7 @@ void LoadModel::vSetPositions(float fl_window_size_x, float fl_window_size_y) {
 void LoadModel::vLoadModel() {
 
     std::wstring wstr_temp = ((TextField*)vec_components[i_index_of_textField])->getTextW();
-    if(std::filesystem::exists(wstr_temp)){
+    if(pc_imageRecognizer->vLoadModel(wstr_temp)){
         ((TextField*)vec_components[i_index_of_informationField])->vSetText(str_feedback_ok);
         str_path_actual = wstr_temp;
         b_is_loaded = true;
@@ -117,7 +117,10 @@ bool LoadModel::executeCommand(std::string &str_command) {
         provideCommand(str_return_command);
         ((TextField*)vec_components[i_index_of_textField])->vSetText("");
     }
-    else if(str_command == comm::str_Button_model_load)vLoadModel();
+    else if(str_command == comm::str_Button_model_load){
+        time_lasttime = clock.getElapsedTime();
+        vLoadModel();
+    }
     return true;
 }
 

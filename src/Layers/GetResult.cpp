@@ -11,7 +11,6 @@ GetResult::GetResult(std::string str_return_command,ImageRecognizer* pc_imageRec
 
 
 GetResult::~GetResult() {
-    delete pc_imageRecognizer;
 }
 
 void GetResult::draw(sf::RenderTarget &target, sf::RenderStates states) const {
@@ -34,21 +33,13 @@ void GetResult::vUpdateEvent(sf::Event &c_Event) {
 
 bool GetResult::executeCommand(std::string &str_command) {
     if(str_command == comm::str_Button_get)vGetResult();
-    else if(str_command == str_return_command)provideCommand(str_return_command);
+    else if(str_command == str_return_command){
+        vReset();
+        provideCommand(str_return_command);
+    }
     return true;
 }
-bool GetResult::setImagePath(std::string &str_image_path) {
-    b_is_image_loaded = pc_imageRecognizer->vLoadImage(str_image_path);
-    return b_is_image_loaded;
-}
-
-bool GetResult::setModelPath(std::string &str_model_path) {
-    b_is_model_loaded = pc_imageRecognizer->vLoadImage(str_model_path);
-    return b_is_model_loaded;
-}
-
 void GetResult::vFirstInit() {
-    pc_imageRecognizer = nullptr;
     b_resized= true;
     b_first_init= true;
 
@@ -107,15 +98,59 @@ void GetResult::vSetPositions(float fl_window_size_x, float fl_window_size_y) {
 }
 
 void GetResult::vGetResult() {
-    if(b_is_model_loaded && b_is_model_loaded){
+    std::vector<std::pair<std::string, double>> vec_result = pc_imageRecognizer->vecGetResult();
+    vCheckResult(vec_result);
+    std::stringstream stream;
+    if(b_is_model_loaded && b_is_image_loaded){
+        stream<<str_get_result_prefix;
+        for(auto& pair : vec_result){
+            stream<<'{'<<pair.first<<','<<pair.second<<'}';
+        }
+    }else{
+        if(!b_is_image_loaded)stream<<str_load_image_fail;
+        else stream<<str_load_image_ok;
+        stream<<' ';
 
-    }else if(b_is_image_loaded)((TextField*)vec_components[i_index_of_informationField])->vSetText(str_load_image_fail);
-    else if(b_is_model_loaded)((TextField*)vec_components[i_index_of_informationField])->vSetText(str_load_model_fail);
-    else ((TextField*)vec_components[i_index_of_informationField])->vSetText(str_load_image_fail +" "+str_load_model_fail);
+        if(!b_is_model_loaded)stream<<str_load_model_fail;
+        else stream<<str_load_model_ok;
+        stream<<' ';
 
+        if(b_unknown_error_occur)stream<<b_unknown_error_occur;
+    }
+
+    if(b_is_image_loaded) {
+        ((SImage*)vec_components[i_index_of_image])->bLoadImage(pc_imageRecognizer->strGetImagePath());
+        ((SImage*)vec_components[i_index_of_image])->vSetBackgroundColor(sf::Color::White);
+    }else ((SImage*)vec_components[i_index_of_image])->vSetBackgroundColor(color_image_background);
+
+    ((TextField*)vec_components[i_index_of_informationField])->vSetText(stream.str());
 }
 
 void GetResult::vReset() {
-
+    ((TextField*)vec_components[i_index_of_informationField])->vSetText("");
 }
+void GetResult::vCheckResult(std::vector<std::pair<std::string, double>> &vec_result) {
+    b_is_image_loaded= true;
+    b_is_model_loaded= true;
+    b_unknown_error_occur= false;
+    if(!vec_result.empty()) {
+        for (auto &pair: vec_result) {
+            if(pair.second < 0){
+                switch ((int)pair.second) {
+                    case ImageRecognizer::ProblemType::NO_MODEL:
+                        b_is_model_loaded= false;
+                    break;
+                    case ImageRecognizer::ProblemType::NO_IMAGE:
+                        b_is_image_loaded= false;
+                        break;
+                    default:
+                        b_unknown_error_occur= true;
+                }
+            }
+        }
+    }else{
+        throw std::runtime_error("ImageRecognizer doesnt work properly");
+    }
+}
+
 

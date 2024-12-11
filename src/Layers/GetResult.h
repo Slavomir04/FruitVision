@@ -25,14 +25,14 @@ public:
 
     bool executeCommand(std::string &str_command) override;
 
-    bool setImagePath(std::string &str_image_path);
-    bool setModelPath(std::string &str_model_path);
+
 
 private:
     void vFirstInit();
     void vSetPositions(float fl_window_size_x,float fl_window_size_y);
     void vGetResult();
     void vReset();
+    void vCheckResult(std::vector<std::pair<std::string, double>>& vec_result);
 
     const int i_index_of_informationField=0;
     const int i_index_of_button_back=1;
@@ -48,11 +48,13 @@ private:
 
     bool b_is_image_loaded;
     bool b_is_model_loaded;
-
-    std::string str_load_image_fail="no model loaded";
-    std::string str_load_model_fail="no image loaded";
+    bool b_unknown_error_occur = "unknown error";
+    std::string str_get_result_prefix="Results:";
+    std::string str_unknown_error="unknown error";
+    std::string str_load_image_fail="no image loaded";
+    std::string str_load_model_fail="no model loaded";
     std::string str_load_image_ok="image loaded";
-    std::string str_load_model_ok="image loaded";
+    std::string str_load_model_ok="model loaded";
     std::string str_text_button_back = "back";
     std::string str_text_button_get = "get";
 

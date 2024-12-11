@@ -3,7 +3,7 @@
 //
 
 #include "LoadImage.h"
-LoadImage::LoadImage(std::string str_return_command)  : str_return_command(str_return_command),i_maximum_information_length(50){
+LoadImage::LoadImage(std::string str_return_command,ImageRecognizer* pc_imageRecognizer)  : str_return_command(str_return_command),i_maximum_information_length(50),pc_imageRecognizer(pc_imageRecognizer){
     vFirstInit();
 }
 
@@ -98,7 +98,7 @@ void LoadImage::vSetPositions(float fl_window_size_x, float fl_window_size_y) {
 void LoadImage::vLoadTexture() {
 
     std::string str_temp_path = ((TextField*)vec_components[i_index_of_textField])->getText();
-    if(std::filesystem::exists(str_temp_path)) {
+    if(pc_imageRecognizer->vLoadImage(str_temp_path)) {
         if (((SImage *) vec_components[i_index_of_image])->bLoadImage(str_temp_path)) {
             ((TextField *) vec_components[i_index_of_informationField])->vSetText(str_feedback_ok);
             str_path = str_temp_path;
@@ -138,7 +138,10 @@ bool LoadImage::executeCommand(std::string &str_command) {
         provideCommand(str_return_command);
         ((TextField*)vec_components[i_index_of_textField])->vSetText("");
     }
-    else if(str_command == comm::str_Button_image_load)vLoadTexture();
+    else if(str_command == comm::str_Button_image_load){
+        time_lasttime=clock.getElapsedTime();
+        vLoadTexture();
+    }
     return true;
 }
 

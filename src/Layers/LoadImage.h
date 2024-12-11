@@ -7,17 +7,16 @@
 #include "../Components/TextField/TextField.h"
 #include "../Components/SImage/SImage.h"
 #include "../Interfaces/Layer.h"
-#include <filesystem>
-#define WAIT_TIME 3000
+#include "../Interfaces/Layer.h"
+#include "../Interfaces/ImageRecognizer.h"
+#define WAIT_TIME 1000
 class LoadImage : public Layer{
 public:
-    LoadImage(std::string str_return_command);
+    LoadImage(std::string str_return_command,ImageRecognizer* pc_imageRecognizer);
 
     void vUpdate(const sf::RenderWindow &c_Window) override;
     void vUpdateEvent(sf::Event &c_Event) override;
-
     bool executeCommand(std::string &str_command) override;
-
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 
 private:
@@ -52,11 +51,12 @@ private:
     sf::Text text_load_information;
     std::string str_return_command;
     std::string str_path;
-    bool b_is_loaded;
 
+    bool b_is_loaded;
     bool b_resized;
     bool b_first_init;
     const int i_maximum_information_length;
+    ImageRecognizer* pc_imageRecognizer;
 };
 
 

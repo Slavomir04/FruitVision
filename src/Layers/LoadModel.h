@@ -6,12 +6,13 @@
 #define FRUITVISION_LOADMODEL_H
 #include "../Components/TextField/TextField.h"
 #include "../Interfaces/Layer.h"
-#include <filesystem>
+#include "../Interfaces/ImageRecognizer.h"
+
 #define WAIT_TIME 1000
 
 class LoadModel : public Layer{
 public:
-    LoadModel(std::string str_return_command);
+    LoadModel(std::string str_return_command,ImageRecognizer* imageRecognizer);
 
     void vUpdate(const sf::RenderWindow &c_Window) override;
     void vUpdateEvent(sf::Event &c_Event) override;
@@ -47,11 +48,13 @@ private:
     sf::Text text_load_information;
     std::string str_return_command;
     std::wstring str_path_actual;
-    bool b_is_loaded;
 
+    bool b_is_loaded;
     bool b_resized;
     bool b_first_init;
     const int i_maximum_information_length;
+
+    ImageRecognizer* pc_imageRecognizer;
 };
 
 

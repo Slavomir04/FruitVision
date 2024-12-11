@@ -57,10 +57,10 @@ void App::vFirstInit() {
     this->vec_layer_contener.push_back((Layer*)new GetResult(str_return_to_menu,imageRecognizer));
     vec_layer_contener[i_index_getresult]->addObservator(this);
 
-    this->vec_layer_contener.push_back((Layer*)new LoadImage(str_return_to_menu));
+    this->vec_layer_contener.push_back((Layer*)new LoadImage(str_return_to_menu,imageRecognizer));
     vec_layer_contener[i_index_loadimage]->addObservator(this);
 
-    this->vec_layer_contener.push_back((Layer*)new LoadModel(str_return_to_menu));
+    this->vec_layer_contener.push_back((Layer*)new LoadModel(str_return_to_menu,imageRecognizer));
     vec_layer_contener[i_index_loadmodel]->addObservator(this);
 }
 
@@ -70,7 +70,6 @@ bool App::executeCommand(std::string &str_command) {
     else if(str_command == str_load_model)i_current_target=i_index_loadmodel;
     else if(str_command == str_load_image)i_current_target=i_index_loadimage;
     else if(str_command == str_get_result)i_current_target=i_index_getresult;
-    printf("App executeCommand %s\n",str_command.c_str());
     return true;
 }
 
