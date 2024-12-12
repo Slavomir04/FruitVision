@@ -47,7 +47,7 @@ private:
     sf::Clock clock;
     sf::Text text_load_information;
     std::string str_return_command;
-    std::wstring str_path_actual;
+    std::string str_path_actual;
 
     bool b_is_loaded;
     bool b_resized;

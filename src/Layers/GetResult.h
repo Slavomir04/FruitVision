@@ -8,6 +8,7 @@
 #include "../Components/SImage/SImage.h"
 #include "../Interfaces/Layer.h"
 #include "../Interfaces/ImageRecognizer.h"
+#include <algorithm>
 #include <filesystem>
 
 

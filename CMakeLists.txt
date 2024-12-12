@@ -84,7 +84,7 @@ if (NOT SFML_FOUND)
     FetchContent_MakeAvailable(SFML)
 
 endif()
-target_link_libraries(${PROJECT_NAME} PRIVATE sfml-system sfml-window sfml-graphics sfml-audio)
+target_link_libraries(${PROJECT_NAME} sfml-system sfml-window sfml-graphics sfml-audio)
 
 
 
@@ -101,7 +101,16 @@ target_link_libraries(test PRIVATE sfml-system sfml-window sfml-graphics sfml-au
 add_test(NAME test COMMAND test)
 
 
+#python
 
+#find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
+#include_directories(${Python3_INCLUDE_DIRS})
+#link_directories(${Python3_LIBRARY_DIRS})
+#target_link_libraries(${PROJECT_NAME} ${Python3_LIBRARIES})
+
+find_package(PythonLibs REQUIRED)
+include_directories(${PYTHON_INCLUDE_DIRS})
+target_link_libraries(${PROJECT_NAME} ${PYTHON_LIBRARIES})
 
 
 

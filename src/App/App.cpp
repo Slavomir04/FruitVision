@@ -9,6 +9,7 @@
 App::App(int i_window_size_x, int i_window_size_y, std::string str_name) {
    // this->window = new sf::RenderWindow(sf::VideoMode(i_window_size_x, i_window_size_y), str_name,sf::Style::Titlebar | sf::Style::Close);
     this->window = new sf::RenderWindow(sf::VideoMode(i_window_size_x, i_window_size_y), str_name);
+    this->window->setFramerateLimit(FRAME_RATE);
     vFirstInit();
 }
 App::~App() {

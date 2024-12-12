@@ -4,48 +4,165 @@
 
 #include "ImageRecognizer_1.h"
 
-ImageRecognizer_1::ImageRecognizer_1() {}
+ImageRecognizer_1::ImageRecognizer_1() {
+ Py_Initialize();
+
+}
 
 ImageRecognizer_1::~ImageRecognizer_1() {
-
+    Py_Finalize();
 }
 
 std::vector<std::pair<std::string, double>> ImageRecognizer_1::vecGetResult() {
-    if(isLoadedImage && isLoadedModel)return {{"Poprawny wynik1",99.15},{"Poprawny wynik2",15.15}};
-    else{
-        std::vector<std::pair<std::string, double>> temp;
-        if(!isLoadedImage)temp.push_back({"",(double )ImageRecognizer::ProblemType::NO_IMAGE});
-        if(!isLoadedModel)temp.push_back({"",(double )ImageRecognizer::ProblemType::NO_MODEL});
-        return temp;
+    std::vector<std::pair<std::string, double>> result;
+    if (isLoadedImage && isLoadedModel) {
+        PyObject* pResult = callPythonFunction("getResult", str_path_image, str_path_model);
+        if (pResult && PyList_Check(pResult)) {
+            Py_ssize_t size = PyList_Size(pResult);
+            for (Py_ssize_t i = 0; i < size; ++i) {
+                PyObject* pItem = PyList_GetItem(pResult, i);
+                if (pItem && PyTuple_Check(pItem)) {
+                    PyObject* pLabel = PyTuple_GetItem(pItem, 0);
+                    PyObject* pProb = PyTuple_GetItem(pItem, 1);
+
+                    /*
+                    if (!PyUnicode_Check(pLabel)) {
+                        printf("pLabel is not a string. Type: %s\n",pLabel->ob_type->tp_name);
+                    }
+                    if (!PyFloat_Check(pProb)) {
+                        printf("pProb is not a string. Type: %s\n",pLabel->ob_type->tp_name);
+                    }
+                    */
+
+
+
+                    std::string label = PyUnicode_AsUTF8(pLabel);
+                    double probability = PyFloat_AsDouble(pProb);
+                    result.emplace_back(label, probability);
+
+                }
+            }
+        }
+        Py_XDECREF(pResult);
+    } else {
+        if (!isLoadedImage) {
+            result.emplace_back("", static_cast<double>(ImageRecognizer::ProblemType::NO_IMAGE));
+        }
+        if (!isLoadedModel) {
+            result.emplace_back("", static_cast<double>(ImageRecognizer::ProblemType::NO_MODEL));
+        }
     }
+    return result;
 }
 
 bool ImageRecognizer_1::vLoadModel(std::string str_adres) {
-    bool temp = std::filesystem::exists(str_adres);
-    if(temp)str_path_model=str_adres;
-    isLoadedModel = (isLoadedModel || temp);
-    return temp;
+    PyObject* pResult = callPythonFunction("isPathModelCorrect", str_adres);
+    if (pResult && PyObject_IsTrue(pResult)) {
+        str_path_model = str_adres;
+        isLoadedModel = true;
+        Py_DECREF(pResult);
+        return true;
+    }
+    Py_XDECREF(pResult);
+    return false;
 }
 
 bool ImageRecognizer_1::vLoadImage(std::string str_adres) {
-    bool temp = std::filesystem::exists(str_adres);
-    if(temp)str_path_image=str_adres;
-    isLoadedImage = (isLoadedImage || temp);
-    return temp;
+    PyObject* pResult = callPythonFunction("isPathImageCorrect", str_adres);
+    if (pResult && PyObject_IsTrue(pResult)) {
+        str_path_image = str_adres;
+        isLoadedImage = true;
+        Py_DECREF(pResult);
+        return true;
+    }
+    Py_XDECREF(pResult);
+    return false;
 }
 
 bool ImageRecognizer_1::vLoadModel(std::wstring str_adres) {
-    bool temp = std::filesystem::exists(str_adres);
-
-    isLoadedModel = (isLoadedModel || temp);
-    return temp;
+    throw std::runtime_error("wstring is not implemented yet");
 }
 
 bool ImageRecognizer_1::vLoadImage(std::wstring str_adres) {
-    bool temp = std::filesystem::exists(str_adres);
+    throw std::runtime_error("wstring is not implemented yet");
+}
 
-    isLoadedImage = (isLoadedImage || temp);
-    return temp;
+PyObject* ImageRecognizer_1::callPythonFunction(const std::string& funcName, const std::string& arg1, const std::string& arg2) {
+    return callPythonFunctionInternal(funcName, {arg1, arg2});
+}
+
+PyObject* ImageRecognizer_1::callPythonFunction(const std::string& funcName, const std::string& arg1) {
+    return callPythonFunctionInternal(funcName, {arg1});
+}
+
+PyObject* ImageRecognizer_1::callPythonFunctionInternal(const std::string& funcName, const std::vector<std::string>& args) {
+    const std::string pythonScriptPath = std::filesystem::current_path().string() + "fruitRecognizer3.py";
+    printf("filesystem: %s\n", pythonScriptPath.c_str());
+    PyObject* pName = nullptr;
+    PyObject* pModule = nullptr;
+    PyObject* pFunc = nullptr;
+    PyObject* pArgs = nullptr;
+    PyObject* pValue = nullptr;
+
+    try {
+        // Convert script path to Python string
+        pName = PyUnicode_DecodeFSDefault("fruitRecognizer3");
+        PyRun_SimpleString(("import sys; sys.path.append('" + std::filesystem::current_path().string() + "/Resources')").c_str());
+
+        if (!pName) {
+            throw std::runtime_error("Failed to decode script path.");
+        }
+
+        // Import the module
+        pModule = PyImport_Import(pName);
+        Py_DECREF(pName);
+
+        if (!pModule) {
+            throw std::runtime_error("Failed to load Python script.");
+        }
+
+        // Retrieve the function from the module
+        pFunc = PyObject_GetAttrString(pModule, funcName.c_str());
+        if (!pFunc || !PyCallable_Check(pFunc)) {
+            throw std::runtime_error("Failed to retrieve function: " + funcName);
+        }
+
+        // Create a tuple for the function arguments
+        pArgs = PyTuple_New(args.size());
+        if (!pArgs) {
+            throw std::runtime_error("Failed to create argument tuple.");
+        }
+
+        for (size_t i = 0; i < args.size(); ++i) {
+            PyObject* pArg = PyUnicode_FromString(args[i].c_str());
+            if (!pArg) {
+                throw std::runtime_error("Failed to convert argument to Python string.");
+            }
+            PyTuple_SetItem(pArgs, i, pArg); // PyTuple_SetItem steals reference to pArg
+        }
+
+        // Call the Python function
+        pValue = PyObject_CallObject(pFunc, pArgs);
+        if (!pValue) {
+            throw std::runtime_error("Failed to call Python function.");
+        }
+
+
+        // Cleanup
+        Py_DECREF(pFunc);
+        Py_DECREF(pModule);
+        Py_DECREF(pArgs);
+    } catch (const std::exception& e) {
+        // Cleanup in case of an exception
+        Py_XDECREF(pFunc);
+        Py_XDECREF(pModule);
+        Py_XDECREF(pArgs);
+        Py_XDECREF(pValue);
+        throw std::runtime_error(std::string(e.what()));
+    }
+
+
+    return pValue;
 }
 
 std::string ImageRecognizer_1::strGetModelPath() {

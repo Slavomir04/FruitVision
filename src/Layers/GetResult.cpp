@@ -103,9 +103,21 @@ void GetResult::vGetResult() {
     std::stringstream stream;
     if(b_is_model_loaded && b_is_image_loaded){
         stream<<str_get_result_prefix;
+
+        std::sort(vec_result.begin(),vec_result.end(),[](const std::pair<std::string, double>& a, const std::pair<std::string, double>& b) {
+            return a.second>b.second;
+        });
+        //for testing is limited to 3
+        for(int i=0; i<(3<vec_result.size() ? 3 : vec_result.size()); i++) {
+            auto& pair = vec_result[i];
+            stream<<'{'<<pair.first<<','<<pair.second<<'}'<<'\n';
+        }
+        /*
         for(auto& pair : vec_result){
             stream<<'{'<<pair.first<<','<<pair.second<<'}';
         }
+        */
+
     }else{
         if(!b_is_image_loaded)stream<<str_load_image_fail;
         else stream<<str_load_image_ok;

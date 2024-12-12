@@ -84,10 +84,10 @@ void LoadModel::vSetPositions(float fl_window_size_x, float fl_window_size_y) {
 }
 void LoadModel::vLoadModel() {
 
-    std::wstring wstr_temp = ((TextField*)vec_components[i_index_of_textField])->getTextW();
-    if(pc_imageRecognizer->vLoadModel(wstr_temp)){
+    std::string str_temp_path = ((TextField*)vec_components[i_index_of_textField])->getText();
+    if(pc_imageRecognizer->vLoadModel(str_temp_path)){
         ((TextField*)vec_components[i_index_of_informationField])->vSetText(str_feedback_ok);
-        str_path_actual = wstr_temp;
+        str_path_actual = str_temp_path;
         b_is_loaded = true;
     }else{
         ((TextField*)vec_components[i_index_of_informationField])->vSetText(str_feedback_fail);
