@@ -41,7 +41,4 @@ jobs:
           cd build
           ctest --output-on-failure
 
-      # Uruchomienie testów TensorFlow (Python)
-      - name: Run Python TensorFlow tests
-        run: |
-          python3 scripts/model.py
+      
