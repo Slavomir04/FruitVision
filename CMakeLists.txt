@@ -102,7 +102,7 @@ target_link_libraries(${PROJECT_NAME} sfml-system sfml-window sfml-graphics sfml
 #python
 
 
-find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
+find_package(Python3 3.10 EXACT REQUIRED COMPONENTS Interpreter Development)
 
 
 include_directories(${Python3_INCLUDE_DIRS})
@@ -112,7 +112,7 @@ target_link_libraries(${PROJECT_NAME} ${Python3_LIBRARIES})
 
 add_custom_target(InstallPythonPackages ALL
         COMMAND ${Python3_EXECUTABLE} -m pip install --upgrade pip
-        COMMAND ${Python3_EXECUTABLE} -m pip install tensorflow pillow numpy
+        COMMAND ${Python3_EXECUTABLE} -m pip install tensorflow==2.18.0 pillow==11.0.0 numpy==2.0.2
         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
         COMMENT "Installing Python dependencies..."
 )
