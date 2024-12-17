@@ -1,0 +1,44 @@
+name: Build and Test C++ with SFML and Python TensorFlow
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch: # Dodanie wsparcia dla ręcznego uruchamiania
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Pobranie kodu
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      # Instalacja C++ i SFML
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake g++ make libsfml-dev python3 python3-pip
+
+      # Instalacja TensorFlow dla Pythona
+      - name: Install Python dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          pip install tensorFlow numpy pillow
+
+      # Budowanie projektu C++
+      - name: Configure and build project
+        run: |
+          mkdir -p build
+          cd build
+          cmake ..
+          cmake --build .
+
+      # Uruchomienie testów (C++)
+      - name: Run C++ tests
+        run: |
+          cd build
+          ctest --output-on-failure
+
+      
