@@ -44,8 +44,14 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: '3.10'
-
-
+        architecture: 'x64'
+    - name: Verify Python installation
+      shell: bash
+      run: |
+        python --version
+        python -m pip install --upgrade pip setuptools wheel
+        python -c "import sys; print(sys.prefix)"
+        python -m pip install tensorflow==2.18.0 pillow==11.0.0 numpy==2.0.2
     - name: Set reusable strings
       # Turn repeated input strings (such as the build output directory) into step outputs. These step outputs can be used throughout the workflow file.
       id: strings
