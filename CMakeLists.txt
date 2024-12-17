@@ -37,23 +37,28 @@ add_executable(FruitVision main.cpp
 
         src/ImageRecognizer/ImageRecognizer_1.cpp
         src/ImageRecognizer/ImageRecognizer_1.h
+        src/Reader/SettingsReader.cpp
+        src/Reader/SettingsReader.h
 )
-add_executable(test
-        tests/test.cpp
-        src/Interfaces/Observator.h
-        src/Interfaces/Observable.h
+add_executable(test tests/test.cpp
+
         src/App/App.cpp
         src/App/App.h
+
+        src/Interfaces/Observator.h
+        src/Interfaces/Observable.h
         src/Interfaces/Component.h
         src/Interfaces/Layer.h
         src/Interfaces/ImageRecognizer.h
         src/Interfaces/Updateable.h
+        src/Interfaces/Commands.h
+
         src/Components/Button.h
         src/Components/TextField/TextField.cpp
         src/Components/TextField/TextField.h
         src/Components/SButton/SButton.cpp
         src/Components/SButton/SButton.h
-        src/Interfaces/Commands.h
+
         src/Layers/MenuLayer.cpp
         src/Layers/MenuLayer.h
         src/Layers/LoadModel.cpp
@@ -62,10 +67,14 @@ add_executable(test
         src/Layers/LoadImage.h
         src/Layers/GetResult.cpp
         src/Layers/GetResult.h
+
         src/Components/SImage/SImage.cpp
         src/Components/SImage/SImage.h
+
         src/ImageRecognizer/ImageRecognizer_1.cpp
         src/ImageRecognizer/ImageRecognizer_1.h
+        src/Reader/SettingsReader.cpp
+        src/Reader/SettingsReader.h
 )
 
 set(BUILD_SHARED_LIBS OFF)
@@ -88,6 +97,32 @@ target_link_libraries(${PROJECT_NAME} sfml-system sfml-window sfml-graphics sfml
 
 
 
+
+
+#python
+
+
+find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
+
+
+include_directories(${Python3_INCLUDE_DIRS})
+link_directories(${Python3_LIBRARY_DIRS})
+target_link_libraries(${PROJECT_NAME} ${Python3_LIBRARIES})
+
+
+add_custom_target(InstallPythonPackages ALL
+        COMMAND ${Python3_EXECUTABLE} -m pip install --upgrade pip
+        COMMAND ${Python3_EXECUTABLE} -m pip install tensorflow pillow numpy
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+        COMMENT "Installing Python dependencies..."
+)
+
+
+#find_package(PythonLibs REQUIRED)
+#include_directories(${PYTHON_INCLUDE_DIRS})
+#target_link_libraries(${PROJECT_NAME} ${PYTHON_LIBRARIES})
+
+
 #google test
 
 FetchContent_Declare(
@@ -98,19 +133,6 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(googletest)
 target_link_libraries(test PRIVATE gtest_main)
 target_link_libraries(test PRIVATE sfml-system sfml-window sfml-graphics sfml-audio)
+target_link_libraries(test PRIVATE ${PYTHON_LIBRARIES})
 add_test(NAME test COMMAND test)
-
-
-#python
-
-#find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
-#include_directories(${Python3_INCLUDE_DIRS})
-#link_directories(${Python3_LIBRARY_DIRS})
-#target_link_libraries(${PROJECT_NAME} ${Python3_LIBRARIES})
-
-find_package(PythonLibs REQUIRED)
-include_directories(${PYTHON_INCLUDE_DIRS})
-target_link_libraries(${PROJECT_NAME} ${PYTHON_LIBRARIES})
-
-
 
