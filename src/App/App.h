@@ -13,7 +13,8 @@
 #include "../Layers/LoadModel.h"
 #include "../Layers/LoadImage.h"
 #include "../ImageRecognizer/ImageRecognizer_1.h"
-
+#include "../Reader/SettingsReader.h"
+#define SETTINGS_PATH  "../src/Resources/settings.txt"
 #define FRAME_RATE 60
 class App : Observator{
 public:
@@ -33,11 +34,6 @@ private:
     const int i_index_getresult=1;
     const int i_index_loadimage=2;
     const int i_index_loadmodel=3;
-
-    const std::string str_return_to_menu = "menu";
-    const std::string str_get_result = "get result";
-    const std::string str_load_model = "load model";
-    const std::string str_load_image = "load image";
 
     ImageRecognizer* imageRecognizer;
 };

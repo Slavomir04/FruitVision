@@ -24,7 +24,7 @@ public:
     virtual std::string strGetModelPath(){return {};}
     virtual std::string strGetImagePath(){return {};}
 
-protected:
+
 };
 
 

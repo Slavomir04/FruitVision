@@ -7,7 +7,6 @@
 
 
 App::App(int i_window_size_x, int i_window_size_y, std::string str_name) {
-   // this->window = new sf::RenderWindow(sf::VideoMode(i_window_size_x, i_window_size_y), str_name,sf::Style::Titlebar | sf::Style::Close);
     this->window = new sf::RenderWindow(sf::VideoMode(i_window_size_x, i_window_size_y), str_name);
     this->window->setFramerateLimit(FRAME_RATE);
     vFirstInit();
@@ -45,32 +44,41 @@ void App::vStart() {
 }
 
 void App::vFirstInit() {
+    SettingsReader reader;
+    std::string path = SETTINGS_PATH;
+    reader.read(path);
+
     imageRecognizer = (ImageRecognizer*)new ImageRecognizer_1();
 
     this->i_current_target=0;
 
     this->vec_layer_contener.push_back((Layer*)new MenuLayer());
     vec_layer_contener[i_index_menu]->addObservator(this);
-    ((MenuLayer*)vec_layer_contener[i_index_menu])->vAddSButton("Get Result",str_get_result);
-    ((MenuLayer*)vec_layer_contener[i_index_menu])->vAddSButton("Load image",str_load_image);
-    ((MenuLayer*)vec_layer_contener[i_index_menu])->vAddSButton("Load model", str_load_model);
+    std::string str_key;
+    std::string str_get_result = "Get Result"; reader.vOverrideValueIfExists(str_get_result,(str_key=PREFIX_MENU+std::to_string(0)));
+    std::string str_load_image = "Load image"; reader.vOverrideValueIfExists(str_load_image,(str_key=PREFIX_MENU+std::to_string(1)));
+    std::string str_load_model = "Load model"; reader.vOverrideValueIfExists(str_load_model,(str_key=PREFIX_MENU+std::to_string(2)));
 
-    this->vec_layer_contener.push_back((Layer*)new GetResult(str_return_to_menu,imageRecognizer));
+    ((MenuLayer*)vec_layer_contener[i_index_menu])->vAddSButton(str_get_result,comm::str_go_get_result);
+    ((MenuLayer*)vec_layer_contener[i_index_menu])->vAddSButton(str_load_image,comm::str_go_load_image);
+    ((MenuLayer*)vec_layer_contener[i_index_menu])->vAddSButton(str_load_model, comm::str_go_load_model);
+
+    this->vec_layer_contener.push_back((Layer*)new GetResult(comm::str_return_to_menu,imageRecognizer,reader));
     vec_layer_contener[i_index_getresult]->addObservator(this);
 
-    this->vec_layer_contener.push_back((Layer*)new LoadImage(str_return_to_menu,imageRecognizer));
+    this->vec_layer_contener.push_back((Layer*)new LoadImage(comm::str_return_to_menu,imageRecognizer,reader));
     vec_layer_contener[i_index_loadimage]->addObservator(this);
 
-    this->vec_layer_contener.push_back((Layer*)new LoadModel(str_return_to_menu,imageRecognizer));
+    this->vec_layer_contener.push_back((Layer*)new LoadModel(comm::str_return_to_menu,imageRecognizer,reader));
     vec_layer_contener[i_index_loadmodel]->addObservator(this);
 }
 
 
 bool App::executeCommand(std::string &str_command) {
-    if(str_command == str_return_to_menu)i_current_target=i_index_menu;
-    else if(str_command == str_load_model)i_current_target=i_index_loadmodel;
-    else if(str_command == str_load_image)i_current_target=i_index_loadimage;
-    else if(str_command == str_get_result)i_current_target=i_index_getresult;
+    if(str_command == comm::str_return_to_menu)i_current_target=i_index_menu;
+    else if(str_command == comm::str_go_load_model)i_current_target=i_index_loadmodel;
+    else if(str_command == comm::str_go_load_image)i_current_target=i_index_loadimage;
+    else if(str_command == comm::str_go_get_result)i_current_target=i_index_getresult;
     return true;
 }
 

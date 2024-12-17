@@ -7,9 +7,8 @@
 #include "../Button.h"
 #define DEFAULT_OUTLINE_THICKNES 4
 #define DEFAULT_CHARACTER_SIZE 30
-
 #define DEFAULT_FONT_PATH "../src/Resources/font.ttf"
-#define FONT_CANNOT_LOAD_TEXT "nie mozna zaladowac czcionki! "
+#define FONT_CANNOT_LOAD "cannot load font! "
 #define DEFAULT_COMMAND "clicked"
 class SButton : public Button{
 public:

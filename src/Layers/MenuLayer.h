@@ -7,6 +7,7 @@
 
 #include "../Components/TextField/TextField.h"
 #include "../Interfaces/Layer.h"
+#define PREFIX_MENU "M"
 class MenuLayer : Layer{
 public:
     MenuLayer();

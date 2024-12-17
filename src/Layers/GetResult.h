@@ -8,14 +8,17 @@
 #include "../Components/SImage/SImage.h"
 #include "../Interfaces/Layer.h"
 #include "../Interfaces/ImageRecognizer.h"
+#include "../Reader/SettingsReader.h"
 #include <algorithm>
 #include <filesystem>
-
+#define PREDICTIONS_LIMIT 3
+#define PREFIX_GET_RESULT "GR"
 
 
 class GetResult : public Layer{
 public:
     GetResult(std::string str_return_command,ImageRecognizer* pc_imageRecognizer);
+    GetResult(std::string str_return_command,ImageRecognizer* pc_imageRecognizer,SettingsReader& settings);
     ~GetResult() override;
 
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
@@ -49,7 +52,7 @@ private:
 
     bool b_is_image_loaded;
     bool b_is_model_loaded;
-    bool b_unknown_error_occur = "unknown error";
+    bool b_unknown_error_occur = false;
     std::string str_get_result_prefix="Results:";
     std::string str_unknown_error="unknown error";
     std::string str_load_image_fail="no image loaded";
@@ -60,7 +63,8 @@ private:
     std::string str_text_button_get = "get";
 
 
-    sf::Color color_image_background = sf::Color::Green;
+
+    sf::Color color_image_background = sf::Color::Blue;
     std::string str_return_command;
 
     bool b_resized;

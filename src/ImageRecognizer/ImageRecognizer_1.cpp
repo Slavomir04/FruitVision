@@ -25,17 +25,6 @@ std::vector<std::pair<std::string, double>> ImageRecognizer_1::vecGetResult() {
                     PyObject* pLabel = PyTuple_GetItem(pItem, 0);
                     PyObject* pProb = PyTuple_GetItem(pItem, 1);
 
-                    /*
-                    if (!PyUnicode_Check(pLabel)) {
-                        printf("pLabel is not a string. Type: %s\n",pLabel->ob_type->tp_name);
-                    }
-                    if (!PyFloat_Check(pProb)) {
-                        printf("pProb is not a string. Type: %s\n",pLabel->ob_type->tp_name);
-                    }
-                    */
-
-
-
                     std::string label = PyUnicode_AsUTF8(pLabel);
                     double probability = PyFloat_AsDouble(pProb);
                     result.emplace_back(label, probability);
@@ -96,7 +85,8 @@ PyObject* ImageRecognizer_1::callPythonFunction(const std::string& funcName, con
 }
 
 PyObject* ImageRecognizer_1::callPythonFunctionInternal(const std::string& funcName, const std::vector<std::string>& args) {
-    const std::string pythonScriptPath = std::filesystem::current_path().string() + "fruitRecognizer3.py";
+
+    const std::string pythonScriptPath = std::string(IMAGE_RECOGNIZER_PATH)+std::string(IMAGE_RECOGNIZER_SCRIPT_NAME)+".py";
     printf("filesystem: %s\n", pythonScriptPath.c_str());
     PyObject* pName = nullptr;
     PyObject* pModule = nullptr;
@@ -105,15 +95,16 @@ PyObject* ImageRecognizer_1::callPythonFunctionInternal(const std::string& funcN
     PyObject* pValue = nullptr;
 
     try {
-        // Convert script path to Python string
-        pName = PyUnicode_DecodeFSDefault("fruitRecognizer3");
+
+
+        pName = PyUnicode_DecodeFSDefault(IMAGE_RECOGNIZER_SCRIPT_NAME);
         PyRun_SimpleString(("import sys; sys.path.append('" + std::filesystem::current_path().string() + "/Resources')").c_str());
 
         if (!pName) {
             throw std::runtime_error("Failed to decode script path.");
         }
 
-        // Import the module
+
         pModule = PyImport_Import(pName);
         Py_DECREF(pName);
 
@@ -121,13 +112,13 @@ PyObject* ImageRecognizer_1::callPythonFunctionInternal(const std::string& funcN
             throw std::runtime_error("Failed to load Python script.");
         }
 
-        // Retrieve the function from the module
+
         pFunc = PyObject_GetAttrString(pModule, funcName.c_str());
         if (!pFunc || !PyCallable_Check(pFunc)) {
             throw std::runtime_error("Failed to retrieve function: " + funcName);
         }
 
-        // Create a tuple for the function arguments
+
         pArgs = PyTuple_New(args.size());
         if (!pArgs) {
             throw std::runtime_error("Failed to create argument tuple.");
@@ -138,10 +129,10 @@ PyObject* ImageRecognizer_1::callPythonFunctionInternal(const std::string& funcN
             if (!pArg) {
                 throw std::runtime_error("Failed to convert argument to Python string.");
             }
-            PyTuple_SetItem(pArgs, i, pArg); // PyTuple_SetItem steals reference to pArg
+            PyTuple_SetItem(pArgs, i, pArg);
         }
 
-        // Call the Python function
+
         pValue = PyObject_CallObject(pFunc, pArgs);
         if (!pValue) {
             throw std::runtime_error("Failed to call Python function.");
@@ -153,7 +144,7 @@ PyObject* ImageRecognizer_1::callPythonFunctionInternal(const std::string& funcN
         Py_DECREF(pModule);
         Py_DECREF(pArgs);
     } catch (const std::exception& e) {
-        // Cleanup in case of an exception
+        // Cleanup
         Py_XDECREF(pFunc);
         Py_XDECREF(pModule);
         Py_XDECREF(pArgs);

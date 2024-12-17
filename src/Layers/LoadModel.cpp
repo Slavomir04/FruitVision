@@ -8,6 +8,21 @@ LoadModel::LoadModel(std::string str_return_command,ImageRecognizer* imageRecogn
     vFirstInit();
 }
 
+LoadModel::LoadModel(std::string str_return_command, ImageRecognizer *imageRecognizer, SettingsReader &settings): str_return_command(str_return_command),i_maximum_information_length(50),pc_imageRecognizer(imageRecognizer){
+    //overriding strings with settings
+    std::string key;
+
+    settings.vOverrideValueIfExists(str_load_ok,key=(PREFIX_LOAD_MODEL+std::to_string(0)));
+    settings.vOverrideValueIfExists(str_load_fail,key=(PREFIX_LOAD_MODEL+std::to_string(1)));
+    settings.vOverrideValueIfExists(str_feedback_fail,key=(PREFIX_LOAD_MODEL+std::to_string(2)));
+    settings.vOverrideValueIfExists(str_feedback_ok,key=(PREFIX_LOAD_MODEL+std::to_string(3)));
+    settings.vOverrideValueIfExists(str_button_back_name,key=(PREFIX_LOAD_MODEL+std::to_string(4)));
+    settings.vOverrideValueIfExists(str_button_load_name,key=(PREFIX_LOAD_MODEL+std::to_string(5)));
+
+
+    vFirstInit();
+}
+
 void LoadModel::vUpdate(const sf::RenderWindow &c_Window) {
     Layer::vUpdate(c_Window);
     if(b_resized || b_first_init) {

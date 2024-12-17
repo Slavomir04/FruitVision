@@ -23,14 +23,14 @@ public:
     };
 
 
-    void vSetSize(float fl_x, float fl_y) override; //override
+    void vSetSize(float fl_x, float fl_y) override;
     void vSetText(const std::string &text) override;
     void vSetText(const std::wstring &text);
     void vSetAlign(TextAlign_type alignType);
 
 
-    void vUpdate(const sf::RenderWindow &c_Window) override; //override
-    void vUpdateEvent(sf::Event &c_Event) override; //override
+    void vUpdate(const sf::RenderWindow &c_Window) override;
+    void vUpdateEvent(sf::Event &c_Event) override;
 
     std::wstring getTextW();
 
@@ -44,9 +44,8 @@ private:
     void vAlignText();
     void vText_left();
     void vText_right();
-
     bool bValidChar(wchar_t c);
-    char cGetCharFromEvent(sf::Event &c_Event);
+
 protected:
     void vFirstInit() override;
 

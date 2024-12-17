@@ -9,6 +9,23 @@ GetResult::GetResult(std::string str_return_command,ImageRecognizer* pc_imageRec
     vFirstInit();
 }
 
+GetResult::GetResult(std::string str_return_command, ImageRecognizer *pc_imageRecognizer, SettingsReader &settings) : str_return_command(str_return_command), pc_imageRecognizer(pc_imageRecognizer){
+    if(pc_imageRecognizer== nullptr)throw std::runtime_error("image recognizer is nullptr");
+
+    std::string key;
+
+    settings.vOverrideValueIfExists(str_get_result_prefix,key=(PREFIX_GET_RESULT+std::to_string(0)));
+    settings.vOverrideValueIfExists(str_unknown_error,key=(PREFIX_GET_RESULT+std::to_string(1)));
+    settings.vOverrideValueIfExists(str_load_image_fail,key=(PREFIX_GET_RESULT+std::to_string(2)));
+    settings.vOverrideValueIfExists(str_load_model_fail,key=(PREFIX_GET_RESULT+std::to_string(3)));
+    settings.vOverrideValueIfExists(str_load_image_ok,key=(PREFIX_GET_RESULT+std::to_string(4)));
+    settings.vOverrideValueIfExists(str_load_model_ok,key=(PREFIX_GET_RESULT+std::to_string(5)));
+    settings.vOverrideValueIfExists(str_text_button_back,key=(PREFIX_GET_RESULT+std::to_string(6)));
+    settings.vOverrideValueIfExists(str_text_button_get,key=(PREFIX_GET_RESULT+std::to_string(7)));
+
+    vFirstInit();
+}
+
 
 GetResult::~GetResult() {
 }
@@ -107,16 +124,12 @@ void GetResult::vGetResult() {
         std::sort(vec_result.begin(),vec_result.end(),[](const std::pair<std::string, double>& a, const std::pair<std::string, double>& b) {
             return a.second>b.second;
         });
-        //for testing is limited to 3
-        for(int i=0; i<(3<vec_result.size() ? 3 : vec_result.size()); i++) {
+        //for testing is limited to PREDICTIONS_LIMIT
+        for(int i=0; i<(PREDICTIONS_LIMIT<vec_result.size() ? PREDICTIONS_LIMIT : vec_result.size()); i++) {
             auto& pair = vec_result[i];
-            stream<<'{'<<pair.first<<','<<pair.second<<'}'<<'\n';
+            stream<<'{'<<pair.first<<",\t"<<pair.second<<"%}"<<'\n';
         }
-        /*
-        for(auto& pair : vec_result){
-            stream<<'{'<<pair.first<<','<<pair.second<<'}';
-        }
-        */
+
 
     }else{
         if(!b_is_image_loaded)stream<<str_load_image_fail;

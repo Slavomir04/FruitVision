@@ -16,7 +16,6 @@ public:
     virtual sf::Vector2f vfGetSize(){return sf::Vector2f(0, 0);}
     virtual sf::Vector2f vfGetPosition(){return sf::Vector2f(0, 0);}
 
-private:
 
 
 

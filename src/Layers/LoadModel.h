@@ -7,12 +7,13 @@
 #include "../Components/TextField/TextField.h"
 #include "../Interfaces/Layer.h"
 #include "../Interfaces/ImageRecognizer.h"
-
+#include "../Reader/SettingsReader.h"
 #define WAIT_TIME 1000
-
+#define PREFIX_LOAD_MODEL "LM"
 class LoadModel : public Layer{
 public:
     LoadModel(std::string str_return_command,ImageRecognizer* imageRecognizer);
+    LoadModel(std::string str_return_command,ImageRecognizer* imageRecognizer,SettingsReader& settings);
 
     void vUpdate(const sf::RenderWindow &c_Window) override;
     void vUpdateEvent(sf::Event &c_Event) override;

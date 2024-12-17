@@ -8,8 +8,8 @@
 #include "../Interfaces/ImageRecognizer.h"
 #include <filesystem>
 #include <Python.h>
-#define IMAGE_RECOGNIZER_PATH "./Resources/"
-#define IMAGE_RECOGNIZER_SCRIPT_NAME "fruitRecognizer3.py"
+#define IMAGE_RECOGNIZER_PATH "./src/Resources/"
+#define IMAGE_RECOGNIZER_SCRIPT_NAME "fruitRecognizer3"
 class ImageRecognizer_1 : ImageRecognizer{
 public:
     ImageRecognizer_1();

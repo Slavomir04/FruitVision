@@ -9,10 +9,13 @@
 #include "../Interfaces/Layer.h"
 #include "../Interfaces/Layer.h"
 #include "../Interfaces/ImageRecognizer.h"
+#include "../Reader/SettingsReader.h"
 #define WAIT_TIME 1000
+#define PREFIX_LOAD_IMAGE "LI"
 class LoadImage : public Layer{
 public:
     LoadImage(std::string str_return_command,ImageRecognizer* pc_imageRecognizer);
+    LoadImage(std::string str_return_command,ImageRecognizer* pc_imageRecognizer,SettingsReader& settings);
 
     void vUpdate(const sf::RenderWindow &c_Window) override;
     void vUpdateEvent(sf::Event &c_Event) override;

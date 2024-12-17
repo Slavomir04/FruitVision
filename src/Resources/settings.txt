@@ -1,0 +1,28 @@
+
+M0 Predykcja
+M1 Zaladuj Obraz
+M2 Zaladuj Model
+
+GR0 wyniki:
+GR1 nieznany eror!
+GR2 brak zaladowanego obrazu!
+GR3 brak zaladowanego modelu!
+GR4 obraz zaladowany
+GR5 model zaladowany
+GR6 wroc
+GR7 kliknij po wynik!
+
+LI0 Obraz zaladowany
+LI1 brak obrazu!
+LI2 bledna sciezka!
+LI3 poprawna sciezka
+LI4 wroc
+LI5 zaladuj
+
+LM0 Model zaladowany
+LM1 brak modelu!
+LM2 bledna sciezka!
+LM3 poprawna sciezka
+LM4 wroc
+LM5 zaladuj
+

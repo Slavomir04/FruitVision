@@ -139,7 +139,7 @@ void SButton::vFirstInit() {
     vText_center();
 
     if (!bLoadFont(str_font_path)) {
-        throw std::runtime_error(FONT_CANNOT_LOAD_TEXT + str_font_path);
+        throw std::runtime_error(FONT_CANNOT_LOAD + str_font_path);
     }else{
         c_text.setFont(c_font);
     }
@@ -185,12 +185,12 @@ void SButton::vTrimTextSize() {
     //  Checking if the text fits in a rectangle
     sf::FloatRect textBounds = c_text.getGlobalBounds();
     while (textBounds.width*fl_alpha > c_shape.getSize().x || textBounds.height*fl_alpha > c_shape.getSize().y) {
-        fl_fontSize -= fl_decrease_value;  // decrease size of the text
+        fl_fontSize -= fl_decrease_value;
         if (fl_fontSize <= fl_minimum_size) {
-            break;  // avoid to small font size
+            break;
         }
-        c_text.setCharacterSize(static_cast<unsigned int>(fl_fontSize));  // Ustaw nowy rozmiar czcionki
-        textBounds = c_text.getGlobalBounds();  // Zaktualizuj wymiary tekstu
+        c_text.setCharacterSize(static_cast<unsigned int>(fl_fontSize));
+        textBounds = c_text.getGlobalBounds();
     }
 }
 
