@@ -149,37 +149,34 @@ folder_names = ["Apple 6",
                 "Zucchini dark 1"]  # Zastąp to rzeczywistymi nazwami folderów
 
 def isPathModelCorrect(path):
-    # Sprawdź, czy plik modelu istnieje i ma odpowiedni format
     return os.path.exists(path) and path.endswith(".h5")
 
 def isPathImageCorrect(path):
-    # Sprawdź, czy plik obrazu istnieje i ma odpowiedni format
     return os.path.exists(path) and (path.endswith(".jpg") or path.endswith(".png"))
 
 def getResult(img_path, model_path):
-    # Sprawdź, czy ścieżka do modelu jest poprawna
     if not isPathModelCorrect(model_path):
-        print(f"Model nie istnieje lub ma niepoprawny format: {model_path}")
+        print(f"Model does not exist or is wrong!: {model_path}")
         return []
 
-    # Załaduj model
+
     model = load_model(model_path)
-    print(f"Model {model_path} załadowany pomyślnie!")
+    print(f"Model {model_path} loaded correctly!")
 
-    # Parametry obrazu (muszą być zgodne z treningiem modelu)
-    img_height = 150
-    img_width = 150
 
-    # Sprawdź, czy ścieżka do obrazu jest poprawna
+    img_height = 100
+    img_width = 100
+
+
     if not isPathImageCorrect(img_path):
-        print(f"Obraz nie istnieje lub ma niepoprawny format: {img_path}")
+        print(f"Image does not exist or is wrong!: {img_path}")
         return []
 
-    # Załaduj obraz, zmień rozmiar i przekształć na tablicę NumPy
+
     img = image.load_img(img_path, target_size=(img_height, img_width))
-    img_array = image.img_to_array(img)  # Zamiana na tablicę NumPy
-    img_array = np.expand_dims(img_array, axis=0)  # Dodaj wymiar batcha
-    img_array = img_array / 255.0  # Normalizacja (jeśli była stosowana podczas treningu)
+    img_array = image.img_to_array(img)
+    img_array = np.expand_dims(img_array, axis=0)
+    img_array = img_array / 255.0
 
     # Wykonaj predykcję
     predictions = model.predict(img_array)
