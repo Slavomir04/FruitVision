@@ -112,7 +112,7 @@ target_link_libraries(${PROJECT_NAME} ${Python3_LIBRARIES})
 
 add_custom_target(InstallPythonPackages ALL
         COMMAND ${Python3_EXECUTABLE} -m pip install --upgrade pip
-        COMMAND ${Python3_EXECUTABLE} -m pip install tensorflow==2.18.0 pillow==11.0.0 numpy==2.0.2 python-dev-tools
+        COMMAND ${Python3_EXECUTABLE} -m pip install python-dev-tools tensorflow==2.18.0 pillow==11.0.0 numpy==2.0.2
         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
         COMMENT "Installing Python dependencies..."
 )
