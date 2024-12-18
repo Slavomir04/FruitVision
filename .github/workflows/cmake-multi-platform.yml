@@ -51,6 +51,7 @@ jobs:
         python --version
         python -m pip install --upgrade pip setuptools wheel
         python -c "import sys; print(sys.prefix)"
+        python -m pip install python-dev-tools
         python -m pip install tensorflow==2.18.0 pillow==11.0.0 numpy==2.0.2
       
     - name: Set reusable strings
