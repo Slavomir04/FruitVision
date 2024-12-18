@@ -25,7 +25,7 @@ jobs:
       matrix:
         os: [windows-latest]
         build_type: [Release]
-        c_compiler: [gcc, clang, cl]
+        c_compiler: [gcc, cl]
         include:
           - os: windows-latest
             c_compiler: cl
@@ -39,6 +39,20 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - name: Set up Python
+      # Instalacja Pythona w wersji 3.10
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+        architecture: 'x64'
+    - name: Verify Python installation
+      shell: bash
+      run: |
+        python --version
+        python -m pip install --upgrade pip setuptools wheel
+        python -c "import sys; print(sys.prefix)"
+        python -m pip install tensorflow==2.18.0 pillow==11.0.0 numpy==2.0.2
+        python -m pip install python-dev-tools
     - name: Set reusable strings
       # Turn repeated input strings (such as the build output directory) into step outputs. These step outputs can be used throughout the workflow file.
       id: strings
@@ -46,7 +60,16 @@ jobs:
       run: |
         echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
 
+    - name: Debug Python paths
+      run: |
+        echo "Python executable: $(which python)"
+        echo "Python include path: $(python -c 'import sysconfig; print(sysconfig.get_path("include"))')"
+        echo "Python library path: $(python -c 'import sysconfig; print(sysconfig.get_config_var("LIBDIR"))')"
+
+
+
     - name: Configure CMake
+    
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
       run: >
@@ -60,6 +83,10 @@ jobs:
       # Build your program with the given configuration. Note that --config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
       run: cmake --build ${{ steps.strings.outputs.build-output-dir }} --config ${{ matrix.build_type }}
 
+    - name: Install Python dependencies
+      # Uruchomienie targetu InstallPythonPackages z CMakeLists.txt
+      run: cmake --build ${{ steps.strings.outputs.build-output-dir }} --target InstallPythonPackages
+      
     - name: Test
       working-directory: ${{ steps.strings.outputs.build-output-dir }}
       # Execute tests defined by the CMake configuration. Note that --build-config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
