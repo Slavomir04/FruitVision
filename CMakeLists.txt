@@ -5,6 +5,21 @@ project(FruitVision)
 set(CMAKE_CXX_STANDARD 17)
 
 
+if(WIN32)
+    add_definitions(-D_WIN32)
+    set(SOURCES
+            src/FileDialog/FileDialogWindows.cpp
+            src/FileDialog/FileDialogWindows.h
+    )
+elseif(UNIX AND NOT APPLE)
+    add_definitions(-D__linux__)
+    #set(SOURCES FileDialogLinux.h FileDialogLinux.cpp)
+elseif(APPLE)
+    add_definitions(-D__APPLE__)
+    #set(SOURCES FileDialogMac.h FileDialogMac.cpp)
+endif()
+
+
 add_executable(FruitVision main.cpp
         src/App/App.cpp
         src/App/App.h
@@ -39,11 +54,13 @@ add_executable(FruitVision main.cpp
         src/ImageRecognizer/ImageRecognizer_1.h
         src/Reader/SettingsReader.cpp
         src/Reader/SettingsReader.h
+
+        #src/FileDialog/FileDialogWindows.cpp
+        #src/FileDialog/FileDialogWindows.h
+        src/Interfaces/FileDialog.h
+        src/FileDialog/FileDialogFactory.h
 )
 add_executable(test tests/test.cpp
-
-        src/App/App.cpp
-        src/App/App.h
 
         src/Interfaces/Observator.h
         src/Interfaces/Observable.h
@@ -56,29 +73,18 @@ add_executable(test tests/test.cpp
         src/Components/Button.h
         src/Components/TextField/TextField.cpp
         src/Components/TextField/TextField.h
+
         src/Components/SButton/SButton.cpp
         src/Components/SButton/SButton.h
 
-        src/Layers/MenuLayer.cpp
-        src/Layers/MenuLayer.h
-        src/Layers/LoadModel.cpp
-        src/Layers/LoadModel.h
-        src/Layers/LoadImage.cpp
-        src/Layers/LoadImage.h
-        src/Layers/GetResult.cpp
-        src/Layers/GetResult.h
-
         src/Components/SImage/SImage.cpp
         src/Components/SImage/SImage.h
-
-        src/ImageRecognizer/ImageRecognizer_1.cpp
-        src/ImageRecognizer/ImageRecognizer_1.h
-        src/Reader/SettingsReader.cpp
-        src/Reader/SettingsReader.h
 )
-
+target_sources(FruitVision PRIVATE ${SOURCES})
+target_sources(test PRIVATE ${SOURCES})
 set(BUILD_SHARED_LIBS OFF)
 include(FetchContent)
+
 #sfml
 set(SFML_STATIC_LIBRARIES TRUE)
 find_package(SFML COMPONENTS system window graphics audio network QUIET)
@@ -100,15 +106,11 @@ target_link_libraries(${PROJECT_NAME} sfml-system sfml-window sfml-graphics sfml
 
 
 #python
-
-
 find_package(Python3 3.10 EXACT REQUIRED COMPONENTS Interpreter Development)
-
 
 include_directories(${Python3_INCLUDE_DIRS})
 link_directories(${Python3_LIBRARY_DIRS})
 target_link_libraries(${PROJECT_NAME} ${Python3_LIBRARIES})
-
 
 add_custom_target(InstallPythonPackages ALL
         COMMAND ${Python3_EXECUTABLE} -m pip install --upgrade pip
@@ -116,6 +118,8 @@ add_custom_target(InstallPythonPackages ALL
         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
         COMMENT "Installing Python dependencies..."
 )
+
+
 
 
 #find_package(PythonLibs REQUIRED)

@@ -3,6 +3,7 @@
 //
 
 #include "LoadImage.h"
+
 LoadImage::LoadImage(std::string str_return_command,ImageRecognizer* pc_imageRecognizer)  : str_return_command(str_return_command),i_maximum_information_length(50),pc_imageRecognizer(pc_imageRecognizer){
     vFirstInit();
 }
@@ -17,9 +18,15 @@ LoadImage::LoadImage(std::string str_return_command, ImageRecognizer *pc_imageRe
     settings.vOverrideValueIfExists(str_feedback_ok,key=(PREFIX_LOAD_IMAGE+std::to_string(3)));
     settings.vOverrideValueIfExists(str_button_back_name,key=(PREFIX_LOAD_IMAGE+std::to_string(4)));
     settings.vOverrideValueIfExists(str_button_load_name,key=(PREFIX_LOAD_IMAGE+std::to_string(5)));
+    settings.vOverrideValueIfExists(str_button_load_from_file_name,key=(PREFIX_LOAD_IMAGE+std::to_string(6)));
 
     vFirstInit();
 }
+
+LoadImage::~LoadImage() {
+    delete pc_fileDialog;
+}
+
 
 void LoadImage::vUpdate(const sf::RenderWindow &c_Window) {
     Layer::vUpdate(c_Window);
@@ -47,11 +54,14 @@ void LoadImage::vFirstInit() {
     time_lasttime = clock.restart();
     b_is_loaded= false;
 
+    pc_fileDialog = FileDialogFactory::createFileDialog();
+
     this->addComponent((Component*)new TextField(100,100));
     this->addComponent((Component*)new TextField(100,100));
     this->addComponent((Component*)new SButton(100,100,str_button_back_name));
     this->addComponent((Component*)new SButton(100,100,str_button_load_name));
     this->addComponent((Component*)new SImage(100,100));
+    this->addComponent((Component*)new SButton(100,100,str_button_load_from_file_name));
 
     ((TextField*)vec_components[i_index_of_informationField])->vSetFocusable(false);
     ((TextField*)vec_components[i_index_of_informationField])->vSetText(str_load_fail);
@@ -60,6 +70,7 @@ void LoadImage::vFirstInit() {
 
     ((SButton*)vec_components[i_index_of_button_back])->vSetOnClickCommand(str_return_command);
     ((SButton*)vec_components[i_index_of_button_load])->vSetOnClickCommand(comm::str_Button_image_load);
+    ((SButton*)vec_components[i_index_of_button_load_from_file])->vSetOnClickCommand(comm::str_Button_load_image_from_file);
 
     ((SImage*)vec_components[i_index_of_image])->vSetBackgroundColor(color_image_background);
 
@@ -83,6 +94,9 @@ void LoadImage::vSetPositions(float fl_window_size_x, float fl_window_size_y) {
     float fl_size_button_y = fl_window_size_y*vf_scale_buttons.y;
     float fl_shift_button_x = fl_size_button_x*fl_scale_shift;
 
+    float fl_size_button_load_from_file_x = fl_window_size_x*vf_scale_button_load_from_file.x;
+    float fl_size_button_load_from_file_y = fl_window_size_y*vf_scale_button_load_from_file.y;
+    float fl_shift_button_load_from_file_y = fl_size_button_load_from_file_y*fl_scale_shift;
 
     v2f_position+={-fl_size_image_x/2.0f,fl_shift_image_y};
     vec_components[i_index_of_image]->vSetSize(fl_size_image_x,fl_size_image_y);
@@ -108,6 +122,11 @@ void LoadImage::vSetPositions(float fl_window_size_x, float fl_window_size_y) {
     v2f_position+={fl_size_textField_x - fl_size_button_x - fl_shift_button_x*2.0f,0};
     vec_components[i_index_of_button_load]->vSetSize(fl_size_button_x,fl_size_button_y);
     vec_components[i_index_of_button_load]->vSetPosition(v2f_position.x,v2f_position.y);
+
+    v2f_position={(fl_window_size_x-fl_size_button_load_from_file_x)/2.0f,v2f_position.y+fl_size_button_y+fl_shift_button_load_from_file_y};
+    vec_components[i_index_of_button_load_from_file]->vSetSize(fl_size_button_load_from_file_x,fl_size_button_load_from_file_y);
+    vec_components[i_index_of_button_load_from_file]->vSetPosition(v2f_position.x,v2f_position.y);
+
 }
 void LoadImage::vLoadTexture() {
 
@@ -147,6 +166,8 @@ void LoadImage::vReset() {
 }
 
 
+
+
 bool LoadImage::executeCommand(std::string &str_command) {
     if(str_command == str_return_command){
         provideCommand(str_return_command);
@@ -155,9 +176,19 @@ bool LoadImage::executeCommand(std::string &str_command) {
     else if(str_command == comm::str_Button_image_load){
         time_lasttime=clock.getElapsedTime();
         vLoadTexture();
+    }else if(str_command == comm::str_Button_load_image_from_file) {
+
+        if(pc_fileDialog!=nullptr) {
+            std::string result = pc_fileDialog->strGetFilePath(str_description,vec_supported_extensions);
+            if(!result.empty()) {
+                ((TextField*)vec_components[i_index_of_textField])->vSetText(result);
+            }
+        }else std::cerr<<"file dialog is unsupported on this system!\n";
+
     }
     return true;
 }
+
 
 void LoadImage::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     Layer::draw(target, states);

@@ -18,9 +18,14 @@ LoadModel::LoadModel(std::string str_return_command, ImageRecognizer *imageRecog
     settings.vOverrideValueIfExists(str_feedback_ok,key=(PREFIX_LOAD_MODEL+std::to_string(3)));
     settings.vOverrideValueIfExists(str_button_back_name,key=(PREFIX_LOAD_MODEL+std::to_string(4)));
     settings.vOverrideValueIfExists(str_button_load_name,key=(PREFIX_LOAD_MODEL+std::to_string(5)));
+    settings.vOverrideValueIfExists(str_button_load_from_file_name,key=(PREFIX_LOAD_MODEL+std::to_string(6)));
 
 
     vFirstInit();
+}
+
+LoadModel::~LoadModel() {
+    delete pc_fileDialog;
 }
 
 void LoadModel::vUpdate(const sf::RenderWindow &c_Window) {
@@ -44,13 +49,17 @@ void LoadModel::vUpdateEvent(sf::Event &c_Event) {
 void LoadModel::vFirstInit() {
     b_resized= true;
     b_first_init= true;
+
     b_is_loaded= false;
     time_lasttime = clock.restart();
+
+    pc_fileDialog = FileDialogFactory::createFileDialog();
 
     this->addComponent((Component*)new TextField(100, 100));
     this->addComponent((Component*)new TextField(100, 100));
     this->addComponent((Component*)new SButton(100, 100, str_button_back_name));
     this->addComponent((Component*)new SButton(100,100,str_button_load_name));
+    this->addComponent((Component*)new SButton(100,100,str_button_load_from_file_name));
 
     ((TextField*)vec_components[i_index_of_informationField])->vSetFocusable(false);
     ((TextField*)vec_components[i_index_of_informationField])->vSetText(str_load_fail);
@@ -59,7 +68,7 @@ void LoadModel::vFirstInit() {
 
     ((SButton*)vec_components[i_index_of_button_back])->vSetOnClickCommand(str_return_command);
     ((SButton*)vec_components[i_index_of_button_load])->vSetOnClickCommand(comm::str_Button_model_load);
-
+    ((SButton*)vec_components[i_index_of_button_load_from_file])->vSetOnClickCommand(comm::str_Button_load_model_from_file);
 
     for(auto& e : vec_components)e->addObservator(this);
 }
@@ -74,6 +83,9 @@ void LoadModel::vSetPositions(float fl_window_size_x, float fl_window_size_y) {
     float fl_button_size_x = fl_window_size_x*vf_scale_buttons.x;
     float fl_button_size_y = fl_window_size_x*vf_scale_buttons.y;
     float fl_button_shift_x = fl_button_size_x*fl_scale_shift;
+
+    float fl_button_load_from_file_size_x = fl_window_size_x*vf_scale_button_load_from_file.x;
+    float fl_button_load_from_file_size_y = fl_window_size_y*vf_scale_button_load_from_file.y;
 
     v2f_position += {-fl_textField_size_x/2.0f,fl_textField_shift_y};
 
@@ -94,6 +106,10 @@ void LoadModel::vSetPositions(float fl_window_size_x, float fl_window_size_y) {
     v2f_position += {fl_textField_size_x/2.0f - fl_button_size_x - fl_button_shift_x,0};
     vec_components[i_index_of_button_load]->vSetSize(fl_button_size_x,fl_button_size_y);
     vec_components[i_index_of_button_load]->vSetPosition(v2f_position.x,v2f_position.y);
+
+    v2f_position = {(fl_window_size_x - fl_button_load_from_file_size_x)/2.0f,v2f_position.y+fl_button_size_y*1.01f};
+    vec_components[i_index_of_button_load_from_file]->vSetSize(fl_button_load_from_file_size_x,fl_button_load_from_file_size_y);
+    vec_components[i_index_of_button_load_from_file]->vSetPosition(v2f_position.x,v2f_position.y);
 
 
 }
@@ -135,6 +151,15 @@ bool LoadModel::executeCommand(std::string &str_command) {
     else if(str_command == comm::str_Button_model_load){
         time_lasttime = clock.getElapsedTime();
         vLoadModel();
+    }else if(str_command == comm::str_Button_load_model_from_file) {
+
+        if(pc_fileDialog!=nullptr) {
+            std::string result = pc_fileDialog->strGetFilePath(str_description,vec_supported_extensions);
+            if(!result.empty()) {
+                ((TextField*)vec_components[i_index_of_textField])->vSetText(result);
+            }
+        }else std::cerr<<"file dialog is unsupported on this system!\n";
+
     }
     return true;
 }

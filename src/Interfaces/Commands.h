@@ -21,4 +21,7 @@ namespace comm{
     const std::string str_Button_model_load="load model";
     const std::string str_set_image_path="pathImage ";
     const std::string str_set_model_path="pathModel ";
+    const std::string str_Button_load_image_from_file="load image from file";
+    const std::string str_Button_load_model_from_file="load model from file";
+
 }
