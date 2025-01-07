@@ -5,21 +5,21 @@ Application made for predicting fruits.
 
 ## How it works?
 
-![Select an option of interest] src/Resources/images_readme/1.png
+![Select an option of interest](src/Resources/images_readme/1.png)
 
 - Select your favorite option
 
-![Load image 0] src/Resources/images_readme/2.png
+![Load image 0]( src/Resources/images_readme/2.png)
 
-![Load image 0] src/Resources/images_readme/3.png
+![Load image 0](src/Resources/images_readme/3.png)
 
 - Load your Image/Model
 
-![File Dialog] src/Resources/images_readme/4.png
+![File Dialog](src/Resources/images_readme/4.png)
 
 - Use file Dialog <sub>(windows only)<sub/>
 
-![Predict] src/Resources/images_readme/5.png
+![Predict](src/Resources/images_readme/5.png)
 
 - Predict
 
