@@ -75,7 +75,26 @@ jobs:
           python3.10-dev \
           python3.10-venv \
           libxrandr-dev \
-          libxcursor-dev
+          libxcursor-dev \
+          libssl-dev \
+          libffi-dev \
+          build-essential \
+          cython3 \
+          libsqlite3-dev \
+          libpq-dev \
+          libboost-all-dev \
+          pkg-config \
+          libbz2-dev \
+          libreadline-dev \
+          libsqlite3-dev \
+          libncurses5-dev \
+          libncursesw5-dev \
+          liblzma-dev \
+          tk-dev \
+          zlib1g-dev
+        python3 -m pip install --upgrade pip
+        python3 -m pip install setuptools wheel
+        python3 -m pip install flake8
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
