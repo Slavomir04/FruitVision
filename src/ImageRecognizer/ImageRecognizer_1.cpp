@@ -6,7 +6,7 @@
 
 ImageRecognizer_1::ImageRecognizer_1() {
     Py_Initialize();
-    vPreLoad();
+    vPreLoad(CATEGORIES_PATH);
 }
 
 ImageRecognizer_1::~ImageRecognizer_1() {
@@ -76,9 +76,9 @@ bool ImageRecognizer_1::vLoadImage(std::wstring str_adres) {
     throw std::runtime_error("wstring is not implemented yet");
 }
 
-void ImageRecognizer_1::vPreLoad() {
-    vLoadImage("");
-    vLoadModel("");
+void ImageRecognizer_1::vPreLoad(std::string str_categories_path) {
+    PyObject* pResult = callPythonFunction("loadCategories", str_categories_path);
+    Py_XDECREF(pResult);
 }
 
 PyObject* ImageRecognizer_1::callPythonFunction(const std::string& funcName, const std::string& arg1, const std::string& arg2) {

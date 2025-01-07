@@ -10,6 +10,7 @@
 #include <Python.h>
 #define IMAGE_RECOGNIZER_PATH "../src/Resources/"
 #define IMAGE_RECOGNIZER_SCRIPT_NAME "fruitRecognizer3"
+#define CATEGORIES_PATH "../src/Resources/categories.txt"
 class ImageRecognizer_1 : ImageRecognizer{
 public:
     ImageRecognizer_1();
@@ -24,7 +25,7 @@ public:
     bool vLoadImage(std::wstring str_adres) override;
 
 private:
-    void vPreLoad();
+    void vPreLoad(std::string str_categories_path);
     PyObject* callPythonFunction(const std::string& funcName, const std::string& arg1, const std::string& arg2);
     PyObject* callPythonFunction(const std::string& funcName, const std::string& arg1);
     PyObject* callPythonFunctionInternal(const std::string& funcName, const std::vector<std::string>& args);
