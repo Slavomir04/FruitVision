@@ -7,7 +7,7 @@ Application made for predicting fruits.
 
 ![Select an option of interest](src/Resources/images_readme/1.png)
 
-- ## Select your favorite option
+- ## Select your option
 
 ![Load image 0]( src/Resources/images_readme/2.png)
 
@@ -41,7 +41,7 @@ Application made for predicting fruits.
 
 ## Installation
 
-You have to use python 3.10 , and you should "PATH" with python 3.10 path. <sub>(...\Python310\python.exe)</sub>
+You have to use python 3.10 , and you should replace "PATH" with python 3.10 path. <sub>(...\Python310\python.exe)</sub>
 
 
 ```cmd
