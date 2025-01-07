@@ -86,8 +86,13 @@ jobs:
           liblzma-dev \
           tk-dev \
           zlib1g-dev
-
           
+        sudo add-apt-repository ppa:deadsnakes/ppa -y
+        sudo apt update
+        sudo apt install -y python3.10 python3.10-venv python3.10-dev
+
+        sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.10 1
+        python3 -m pip install --upgrade pip
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
