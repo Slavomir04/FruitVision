@@ -73,7 +73,6 @@ jobs:
           libssl-dev \
           libffi-dev \
           build-essential \
-          cython3 \
           libsqlite3-dev \
           libpq-dev \
           libboost-all-dev \
@@ -87,9 +86,7 @@ jobs:
           tk-dev \
           zlib1g-dev
           
-        sudo add-apt-repository ppa:deadsnakes/ppa -y
-        sudo apt update
-        sudo apt install -y python3.10-full
+       
         
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
