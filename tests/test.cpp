@@ -124,8 +124,6 @@ TEST(Components,SButton){
     ASSERT_EQ(observatorTester.bContainsCommand(comm), false);
     observatorTester.vClear();
 
-
-    SUCCEED()<<"SBUTTON clicking test positive";
 }
 
 TEST(Components,TextField){
@@ -214,7 +212,6 @@ TEST(Components,TextField){
     ASSERT_EQ(textField.getText(),"\\");
     textField.vSetText("");
 
-    SUCCEED()<<"TextField typing test positive";
 }
 
 

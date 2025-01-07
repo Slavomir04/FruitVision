@@ -124,7 +124,7 @@ void GetResult::vGetResult() {
         std::sort(vec_result.begin(),vec_result.end(),[](const std::pair<std::string, double>& a, const std::pair<std::string, double>& b) {
             return a.second>b.second;
         });
-        //for testing is limited to PREDICTIONS_LIMIT
+
         for(int i=0; i<(PREDICTIONS_LIMIT<vec_result.size() ? PREDICTIONS_LIMIT : vec_result.size()); i++) {
             auto& pair = vec_result[i];
             stream<<'{'<<pair.first<<",\t"<<pair.second<<"%}"<<'\n';
@@ -174,7 +174,7 @@ void GetResult::vCheckResult(std::vector<std::pair<std::string, double>> &vec_re
             }
         }
     }else{
-        throw std::runtime_error("ImageRecognizer doesnt work properly");
+        throw std::runtime_error("ImageRecognizer does not work properly");
     }
 }
 

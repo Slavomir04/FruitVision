@@ -5,6 +5,7 @@ project(FruitVision)
 set(CMAKE_CXX_STANDARD 17)
 
 
+
 if(WIN32)
     add_definitions(-D_WIN32)
     set(SOURCES
@@ -55,12 +56,11 @@ add_executable(FruitVision main.cpp
         src/Reader/SettingsReader.cpp
         src/Reader/SettingsReader.h
 
-        #src/FileDialog/FileDialogWindows.cpp
-        #src/FileDialog/FileDialogWindows.h
+
         src/Interfaces/FileDialog.h
         src/FileDialog/FileDialogFactory.h
 )
-add_executable(test tests/test.cpp
+add_executable(unit_tests tests/test.cpp
 
         src/Interfaces/Observator.h
         src/Interfaces/Observable.h
@@ -81,7 +81,7 @@ add_executable(test tests/test.cpp
         src/Components/SImage/SImage.h
 )
 target_sources(FruitVision PRIVATE ${SOURCES})
-target_sources(test PRIVATE ${SOURCES})
+target_sources(unit_tests PRIVATE ${SOURCES})
 set(BUILD_SHARED_LIBS OFF)
 include(FetchContent)
 
@@ -135,8 +135,16 @@ FetchContent_Declare(
         GIT_TAG release-1.11.0
 )
 FetchContent_MakeAvailable(googletest)
-target_link_libraries(test PRIVATE gtest_main)
-target_link_libraries(test PRIVATE sfml-system sfml-window sfml-graphics sfml-audio)
-target_link_libraries(test PRIVATE ${PYTHON_LIBRARIES})
-add_test(NAME test COMMAND test)
+
+#tests
+enable_testing()
+target_link_libraries(unit_tests PRIVATE gtest_main)
+target_link_libraries(unit_tests PRIVATE sfml-system sfml-window sfml-graphics sfml-audio)
+target_link_libraries(unit_tests PRIVATE ${PYTHON_LIBRARIES})
+add_test(
+        NAME unit_tests
+        COMMAND unit_tests
+)
+
+
 

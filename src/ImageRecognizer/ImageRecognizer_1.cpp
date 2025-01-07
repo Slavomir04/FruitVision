@@ -5,8 +5,8 @@
 #include "ImageRecognizer_1.h"
 
 ImageRecognizer_1::ImageRecognizer_1() {
- Py_Initialize();
-
+    Py_Initialize();
+    vPreLoad();
 }
 
 ImageRecognizer_1::~ImageRecognizer_1() {
@@ -76,6 +76,11 @@ bool ImageRecognizer_1::vLoadImage(std::wstring str_adres) {
     throw std::runtime_error("wstring is not implemented yet");
 }
 
+void ImageRecognizer_1::vPreLoad() {
+    vLoadImage("");
+    vLoadModel("");
+}
+
 PyObject* ImageRecognizer_1::callPythonFunction(const std::string& funcName, const std::string& arg1, const std::string& arg2) {
     return callPythonFunctionInternal(funcName, {arg1, arg2});
 }
@@ -87,7 +92,6 @@ PyObject* ImageRecognizer_1::callPythonFunction(const std::string& funcName, con
 PyObject* ImageRecognizer_1::callPythonFunctionInternal(const std::string& funcName, const std::vector<std::string>& args) {
 
     const std::string pythonScriptPath = std::string(IMAGE_RECOGNIZER_PATH)+std::string(IMAGE_RECOGNIZER_SCRIPT_NAME)+".py";
-    printf("filesystem: %s\n", pythonScriptPath.c_str());
     PyObject* pName = nullptr;
     PyObject* pModule = nullptr;
     PyObject* pFunc = nullptr;
@@ -98,8 +102,9 @@ PyObject* ImageRecognizer_1::callPythonFunctionInternal(const std::string& funcN
 
 
         pName = PyUnicode_DecodeFSDefault(IMAGE_RECOGNIZER_SCRIPT_NAME);
-        PyRun_SimpleString(("import sys; sys.path.append('" + std::filesystem::current_path().string() + "/Resources')").c_str());
-
+        //PyRun_SimpleString(("import sys; sys.path.append('" + std::filesystem::current_path().string() + "/Resources')").c_str());
+        PyRun_SimpleString(("import sys; sys.path.append('" + std::string(IMAGE_RECOGNIZER_PATH) + "')").c_str());
+       // PyRun_SimpleString("import sys; sys.path.append('../Resources')");
         if (!pName) {
             throw std::runtime_error("Failed to decode script path.");
         }
