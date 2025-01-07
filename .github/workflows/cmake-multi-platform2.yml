@@ -61,7 +61,7 @@ jobs:
 
         sudo add-apt-repository ppa:deadsnakes/ppa -y
         sudo apt update
-        sudo apt install -y python3.10 python3.10-venv python3.10-dev
+        sudo apt install -y python3.10 python3.10-venv python3.10-dev flake8
         
         sudo apt install -y \
           cmake \
