@@ -97,7 +97,7 @@ jobs:
           zlib1g-dev
 
           python3 -m pip install --upgrade pip setuptools wheel
-          python3.10 -m pip install cython3
+          python3.10 -m pip install cython
        
         
     - name: Configure CMake
