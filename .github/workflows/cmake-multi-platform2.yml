@@ -70,7 +70,7 @@ jobs:
         python3.10 -m pip install wheel
         python3 -m pip install --upgrade pip setuptools wheel
         python3.10 -m pip install cython
-        python3.10 -m pip install flake8
+        python3.10 -m pip install --no-cache-dir flake8
         
         sudo apt install -y \
           cmake \
