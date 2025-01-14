@@ -85,7 +85,7 @@ _*(It does not support unicode)*_
 - numpy 2.0.2 https://github.com/numpy/numpy.git
 - googletest https://github.com/google/googletest.git
 #### Platform
-- Windows 64-bit
+- Windows 11 64-bit
 
 #### Features
 - Loading images <sub>*.png .jpg*</sub>
