@@ -184,10 +184,29 @@ def getResult(img_path, model_path):
     # Przekształć wynik na listę etykiet i prawdopodobieństw
     result = []
     for i, pred in enumerate(predictions[0]):
+        if not i < len(folder_names):
+            break
         result.append((folder_names[i], pred*100))
 
     return result
 
 def cli():
     print(getResult(input('wpisz image:'),input('wpisz model:')))
+
+def loadCategories(path):
+    try:
+        temp_tab = []
+        with open(path,'r',encoding='utf-8') as file:
+            for line in file:
+                temp_tab.append(line.strip())
+        if not temp_tab == []:
+            folder_names = temp_tab
+        else:
+            print("Categories are set Default")
+
+    except FileNotFoundError:
+        print(f'There is no file {path}.')
+    except Exception as e:
+        print(e)
+
 
