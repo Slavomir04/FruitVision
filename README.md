@@ -9,11 +9,10 @@ Application made for predicting fruits.
 - [UML](#UML)
 - [Specification](#Specification)
 - [Installation Windows](#Installation-Windows)
+- [Troubleshoot](#Troubleshoot)
 
 
 ## How it works?
-
-![Select an option of interest](src/Resources/images_readme/1.png)
 
 - ### Select your option
 
@@ -31,39 +30,42 @@ Application made for predicting fruits.
 ![Predict](src/Resources/images_readme/6.png)<br>
 
 - If you want to load model with diffrent categories overide: *src/Resources/categories.txt*
-- if you want to translate interfaceo override: *src/Resources/settings.txt*
+- if you want to translate interface override: *src/Resources/settings.txt*
 for example:
-| Key | Polish | Default |
-|-----|--------|---------|
-| M0  | Predykcja Get Result | Prediction Get Result |
-| M1  | Zaladuj Obraz Load image | Load Image |
-| M2  | Zaladuj Model Load model | Load Model |
-| GR0 | wyniki: Results: | Results: |
-| GR1 | nieznany eror! unknown error | unknown error! |
-| GR2 | brak zaladowanego obrazu! no image loaded | no image loaded! |
-| GR3 | brak zaladowanego modelu! no model loaded | no model loaded! |
-| GR4 | obraz zaladowany image loaded | image loaded |
-| GR5 | model zaladowany model loaded | model loaded |
-| GR6 | wroc back | back |
-| GR7 | kliknij po wynik! get | click to get result! |
-| LI0 | Obraz zaladowany Loaded image | Loaded image |
-| LI1 | brak obrazu! no Image loaded | no Image loaded |
-| LI2 | bledna sciezka! wrong path! | wrong path! |
-| LI3 | poprawna sciezka Correct path! | correct path! |
-| LI4 | wroc back | back |
-| LI5 | zaladuj load | load |
-| LI6 | zaladuj z pliku load from file | load from file |
-| LI7 | nie mozna otworzyc pliku! | cannot open file! |
-| LM0 | Model zaladowany Loaded model | Loaded model |
-| LM1 | brak modelu! no model loaded | no model loaded |
-| LM2 | bledna sciezka! wrong path! | wrong path! |
-| LM3 | poprawna sciezka Correct path! | correct path! |
-| LM4 | wroc back | back |
-| LM5 | zaladuj load | load |
-| LM6 | zaladuj z pliku load from file | load from file |
+
+| Key  | Polish                | Default                |
+| ---- | ----------------------| ------------------------|
+| M0   | Predykcja Get Result  | Prediction Get Result   |
+| M1   | Zaladuj Obraz          | Load Image              |
+| M2   | Zaladuj Model          | Load Model              |
+| GR0  | wyniki                 | Results                 |
+| GR1  | nieznany eror           | unknown error            |
+| GR2  | brak zaladowanego obrazu| no image loaded         |
+| GR3  | brak zaladowanego modelu| no model loaded         |
+| GR4  | obraz zaladowany        | image loaded            |
+| GR5  | model zaladowany        | model loaded            |
+| GR6  | wroc                   | back                    |
+| GR7  | kliknij po wynik       | click to get result     |
+| LI0  | Obraz zaladowany        | Loaded image            |
+| LI1  | brak obrazu            | no image loaded         |
+| LI2  | bledna sciezka         | wrong path              |
+| LI3  | poprawna sciezka        | correct path            |
+| LI4  | wroc                   | back                    |
+| LI5  | zaladuj                 | load                    |
+| LI6  | zaladuj z pliku         | load from file          |
+| LI7  | nie mozna otworzyc pliku| cannot open file        |
+| LM0  | Model zaladowany        | Loaded model            |
+| LM1  | brak modelu            | no model loaded         |
+| LM2  | bledna sciezka         | wrong path              |
+| LM3  | poprawna sciezka        | correct path            |
+| LM4  | wroc                   | back                    |
+| LM5  | zaladuj                 | load                    |
+| LM6  | zaladuj z pliku         | load from file          |
+
+
+
 
 _*(It does not support unicode)*_
-
 
 ### UML
 
@@ -110,4 +112,12 @@ if you struggle with other existing version of python add: _-DPython3_EXECUTABLE
     cmake .. -G "MinGW Makefiles"
     mingw32-make
 ```
+## Troubleshoot
+
+If you encounter any issues or if something isn’t working as expected, feel free to reach out here. You can report problems or ask for help by creating an issue on GitHub.
+
+- **GitHub Issues**: [GitHub Issues](https://github.com/Slavomir04/FruitVision/issues)
+
+Please share any problems you face, and I’ll do my best to assist you!
+
 
