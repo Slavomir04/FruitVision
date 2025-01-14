@@ -19,6 +19,8 @@ LoadImage::LoadImage(std::string str_return_command, ImageRecognizer *pc_imageRe
     settings.vOverrideValueIfExists(str_button_back_name,key=(PREFIX_LOAD_IMAGE+std::to_string(4)));
     settings.vOverrideValueIfExists(str_button_load_name,key=(PREFIX_LOAD_IMAGE+std::to_string(5)));
     settings.vOverrideValueIfExists(str_button_load_from_file_name,key=(PREFIX_LOAD_IMAGE+std::to_string(6)));
+    settings.vOverrideValueIfExists(str_feedback_cannnot_open_file,key=(PREFIX_LOAD_IMAGE+std::to_string(7)));
+
 
     vFirstInit();
 }

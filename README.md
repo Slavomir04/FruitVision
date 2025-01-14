@@ -1,62 +1,113 @@
 
 # FruitVision
 
+
 Application made for predicting fruits.
 
-# How it works?
+### Contents:
+- [How it works?](#How-it-works?)
+- [UML](#UML)
+- [Specification](#Specification)
+- [Installation Windows](#Installation-Windows)
+
+
+## How it works?
 
 ![Select an option of interest](src/Resources/images_readme/1.png)
 
-- ## Select your option
+- ### Select your option
 
-![Load image 0]( src/Resources/images_readme/2.png)
+![Menu]( src/Resources/images_readme/1.png)<br>
 
-![Load image 0](src/Resources/images_readme/3.png)
+![Load image](src/Resources/images_readme/2.png)<br>
 
-- ## Load your Image/Model
+- ### Load your Image/Model
+ <sub>*file Dialog (windows only)*<sub/>
 
-![File Dialog](src/Resources/images_readme/4.png)
+![File Dialog](src/Resources/images_readme/3.png)<br>
+![LoadImage](src/Resources/images_readme/4.png)<br>
+![LoadModel](src/Resources/images_readme/5.png)<br>
+- ### Predict
+![Predict](src/Resources/images_readme/6.png)<br>
 
-- ## Use file Dialog <sub>(windows only)<sub/>
+- If you want to load model with diffrent categories overide: *src/Resources/categories.txt*
+- if you want to translate interfaceo override: *src/Resources/settings.txt*
+for example:
+| Key | Polish | Default |
+|-----|--------|---------|
+| M0  | Predykcja Get Result | Prediction Get Result |
+| M1  | Zaladuj Obraz Load image | Load Image |
+| M2  | Zaladuj Model Load model | Load Model |
+| GR0 | wyniki: Results: | Results: |
+| GR1 | nieznany eror! unknown error | unknown error! |
+| GR2 | brak zaladowanego obrazu! no image loaded | no image loaded! |
+| GR3 | brak zaladowanego modelu! no model loaded | no model loaded! |
+| GR4 | obraz zaladowany image loaded | image loaded |
+| GR5 | model zaladowany model loaded | model loaded |
+| GR6 | wroc back | back |
+| GR7 | kliknij po wynik! get | click to get result! |
+| LI0 | Obraz zaladowany Loaded image | Loaded image |
+| LI1 | brak obrazu! no Image loaded | no Image loaded |
+| LI2 | bledna sciezka! wrong path! | wrong path! |
+| LI3 | poprawna sciezka Correct path! | correct path! |
+| LI4 | wroc back | back |
+| LI5 | zaladuj load | load |
+| LI6 | zaladuj z pliku load from file | load from file |
+| LI7 | nie mozna otworzyc pliku! | cannot open file! |
+| LM0 | Model zaladowany Loaded model | Loaded model |
+| LM1 | brak modelu! no model loaded | no model loaded |
+| LM2 | bledna sciezka! wrong path! | wrong path! |
+| LM3 | poprawna sciezka Correct path! | correct path! |
+| LM4 | wroc back | back |
+| LM5 | zaladuj load | load |
+| LM6 | zaladuj z pliku load from file | load from file |
 
-![Predict](src/Resources/images_readme/5.png)
-
-- ## Predict
+_*(It does not support unicode)*_
 
 
+### UML
+
+![UML](documentation/Application%20blueprint.pdf)
+
+### Specification
+
+#### Standard C++
+ - C++ 20
+#### Third party libraries
+- cmake https://github.com/Kitware/CMake.git
+- SFML 2.6.2 https://github.com/SFML/SFML.git
+- Python 3.10  https://github.com/python/cpython.git
+- python-dev-tools https://github.com/vpoulailleau/python-dev-tools
+- tensorflow 2.18.0 https://github.com/tensorflow/tensorflow.git
+- pillow 11.0.0 https://github.com/python-pillow/Pillow.git
+- numpy 2.0.2 https://github.com/numpy/numpy.git
+- googletest https://github.com/google/googletest.git
+#### Platform
+- Windows 64-bit
+
+#### Features
+- Loading images <sub>*.png .jpg*</sub>
+- Custom Model Support <sub>*.h5*</sub>
+- file Dialog
+- User-Friendly Interface
+- Easy translation thanks to *.txt* text source
+
+## Installation Windows
+
+#### Requirments:
+- git
+- cmake
+- Recommended: MinGW 13.1.0 64-bit <sub>(other versions supported by SFML 2.6.2 should work as well)</sub>
+- Python 3.10
 
 
-
-
-
-
-
-## Documentation
-
-![Documentation](Documentation/Application%20blueprint.pdf)
-
-
-
-
-
-## Installation
-
-You have to use python 3.10 , and you should replace "PATH" with python 3.10 path. <sub>(...\Python310\python.exe)</sub>
-
-
+if you struggle with other existing version of python add: _-DPython3_EXECUTABLE= <python 3.10 path>_
 ```cmd
     git clone https://github.com/Slavomir04/FruitVision.git
     cd FruitVision
     mkdir build
     cd build
-    cmake .. -G "MinGW Makefiles" -DPython3_EXECUTABLE= "PATH"
-    
+    cmake .. -G "MinGW Makefiles"
     mingw32-make
 ```
-
-
-    
-## License
-
-[MIT](license.txt)
 

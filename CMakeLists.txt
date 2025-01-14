@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 3.26)
 project(FruitVision)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 
 
 
@@ -100,6 +100,9 @@ if (NOT SFML_FOUND)
 
 endif()
 target_link_libraries(${PROJECT_NAME} sfml-system sfml-window sfml-graphics sfml-audio)
+
+
+
 
 
 

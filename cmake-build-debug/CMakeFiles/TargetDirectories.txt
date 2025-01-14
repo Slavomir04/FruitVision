@@ -1,3 +1,0 @@
-C:/programowanie/FruitVision/cmake-build-debug/CMakeFiles/FruitVision.dir
-C:/programowanie/FruitVision/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/programowanie/FruitVision/cmake-build-debug/CMakeFiles/rebuild_cache.dir

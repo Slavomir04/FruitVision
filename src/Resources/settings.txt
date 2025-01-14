@@ -19,6 +19,7 @@ LI3 poprawna sciezka
 LI4 wroc
 LI5 zaladuj
 LI6 zaladuj z pliku
+LI7 nie mozna otworzyc pliku!
 
 LM0 Model zaladowany
 LM1 brak modelu!
