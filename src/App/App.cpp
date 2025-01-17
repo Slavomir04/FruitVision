@@ -46,9 +46,24 @@ void App::vStart() {
 void App::vFirstInit() {
     SettingsReader reader;
     std::string path = SETTINGS_PATH;
+
     reader.read(path);
 
+    imageRecognizer = nullptr;
+
+    window->setVisible(false);
+    bool b_flag = true;
+    std::thread t([&b_flag]() {
+        while(b_flag) {
+            std::cout<<"Loading ... Be Patience"<<std::endl;
+            std::this_thread::sleep_for(std::chrono::seconds(3));
+        }
+        std::cout<<"Done"<<std::endl;
+    });
     imageRecognizer = (ImageRecognizer*)new ImageRecognizer_1();
+    b_flag = false;
+    t.join();
+    window->setVisible(true);
 
     this->i_current_target=0;
 
