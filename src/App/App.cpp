@@ -9,7 +9,16 @@
 App::App(int i_window_size_x, int i_window_size_y, std::string str_name) {
     this->window = new sf::RenderWindow(sf::VideoMode(i_window_size_x, i_window_size_y), str_name);
     this->window->setFramerateLimit(FRAME_RATE);
+    bool flag_init = true;
+    this->window->setActive(false);
+    std::thread t_load_screen([&flag_init,this]() {
+        animateWhileFlag(window,flag_init);
+    });
     vFirstInit();
+    flag_init = false;
+    std::this_thread::sleep_for(std::chrono::seconds(2));
+    t_load_screen.join();
+    this->window->setActive(true);
 }
 App::~App() {
     for(auto& e : vec_layer_contener){
@@ -95,6 +104,45 @@ bool App::executeCommand(std::string &str_command) {
     else if(str_command == comm::str_go_load_image)i_current_target=i_index_loadimage;
     else if(str_command == comm::str_go_get_result)i_current_target=i_index_getresult;
     return true;
+}
+
+void App::animateWhileFlag(sf::RenderWindow* window,bool& flag) {
+    window->setActive(true);
+    float fl_size_ratio = 1;
+    TextField text_field(window->getSize().x*fl_size_ratio,window->getSize().y*fl_size_ratio);
+    text_field.vSetFocusable(false);
+    text_field.vSetAlign(TextField::Center);
+    text_field.vSetCharacterSize(80);
+    float fl_pos_x = (window->getSize().x - text_field.vfGetSize().x)/2;
+    float fl_pos_y = (window->getSize().y - text_field.vfGetSize().y)/2;
+    text_field.vSetPosition(fl_pos_x,fl_pos_y);
+
+    std::string str_prefix = "Loading";
+    std::string str_suffix = "";
+
+    sf::Clock clock;
+    sf::Time last_time = clock.restart();
+
+    while (window->isOpen() && flag) {
+        sf::Event event;
+        while (window->pollEvent(event)) {
+            if (event.type == sf::Event::Closed) {
+                window->close();
+            }
+        }
+        if (clock.getElapsedTime()-last_time >= sf::seconds(0.3)) {
+            str_suffix+=".";
+            if (str_suffix.length()>3)str_suffix="";
+            last_time = clock.getElapsedTime();
+        }
+        text_field.vSetText(str_prefix+str_suffix);
+        window->clear(sf::Color::Black);
+        window->draw(text_field);
+        window->display();
+    }
+
+
+    window->setActive(false);
 }
 
 

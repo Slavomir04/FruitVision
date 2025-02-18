@@ -14,8 +14,8 @@
 #include "../Layers/LoadImage.h"
 #include "../ImageRecognizer/ImageRecognizer_1.h"
 #include "../Reader/SettingsReader.h"
-#include <chrono>
-#include  <thread>
+
+#include <thread>
 #define SETTINGS_PATH  "../src/Resources/settings.txt"
 #define FRAME_RATE 60
 class App : Observator{
@@ -26,6 +26,7 @@ public:
 private:
     void vFirstInit();
     bool executeCommand(std::string &str_command) override;
+
     sf::RenderWindow* window;
     std::string str_name;
     std::vector<Layer*> vec_layer_contener;
@@ -37,6 +38,7 @@ private:
     const int i_index_loadmodel=3;
 
     ImageRecognizer* imageRecognizer;
+    void animateWhileFlag(sf::RenderWindow* window,bool& flag);
 };
 
 
