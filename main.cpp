@@ -10,7 +10,7 @@ int main()
 {
 
     float alpha = 0.76f;
-   App app(sf::VideoMode::getDesktopMode().width * alpha,sf::VideoMode::getDesktopMode().height * alpha,"App");
+   App app(sf::VideoMode::getDesktopMode().width * alpha,sf::VideoMode::getDesktopMode().height * alpha,"FruitVision");
    app.vStart();
 
 
