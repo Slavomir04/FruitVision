@@ -11,9 +11,11 @@ App::App(int i_window_size_x, int i_window_size_y, std::string str_name) {
     this->window->setFramerateLimit(FRAME_RATE);
     bool flag_init = true;
     this->window->setActive(false);
+    this->window->setVisible(true);
     std::thread t_load_screen([&flag_init,this]() {
         animateWhileFlag(window,flag_init);
     });
+
     vFirstInit();
     flag_init = false;
     std::this_thread::sleep_for(std::chrono::seconds(2));
@@ -60,7 +62,6 @@ void App::vFirstInit() {
 
     imageRecognizer = nullptr;
 
-    window->setVisible(false);
     bool b_flag = true;
     std::thread t([&b_flag]() {
         while(b_flag) {
